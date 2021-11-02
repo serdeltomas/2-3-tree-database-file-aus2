@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <TargetFrameworks>net5.0;net5.0-windows;netcoreapp3.1</TargetFrameworks>
+        <StartupObject></StartupObject>
+        <ApplicationIcon />
+    </PropertyGroup>
+
+    <ItemGroup>
+      <COMReference Include="Microsoft.Vbe.Interop.Forms">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>0</VersionMinor>
+        <VersionMajor>2</VersionMajor>
+        <Guid>0d452ee1-e08f-101a-852e-02608c4d0bb4</Guid>
+        <Lcid>0</Lcid>
+        <Isolated>false</Isolated>
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </COMReference>
+      <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>4</VersionMinor>
+        <VersionMajor>2</VersionMajor>
+        <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+      </COMReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="System.Windows.Forms">
+        <HintPath>..\..\..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Windows.Forms.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
