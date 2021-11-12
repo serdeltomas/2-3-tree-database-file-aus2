@@ -31,13 +31,12 @@ namespace Semka1
         } */
         public override string ToString()
         {
-            return "  rod. cislo: " + _rodCislo + " dat. narodenia: " + _datNar + "\t meno: " + _meno + "\t priezvisko: " + _priezvisko + "\n";
+            return "  rod. cislo: " + _rodCislo + "   dat. narodenia: " + _datNar + "\t meno: " + _meno + "\t priezvisko: " + _priezvisko + "\n";
         }
         
         
-        public string GetMeno()
-        {
-            return _meno;}
+        public string GetMeno() {return _meno; }
+        public string GetPriezv() { return _priezvisko; }
 
         public string GetRodCislo()                     
         {   

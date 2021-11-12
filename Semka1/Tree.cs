@@ -35,7 +35,7 @@ namespace Semka1
                 _root = new T23Node<TKey, T>(nKey,nData); 
                 _count++; if(_root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
             ref var node = ref FindNodeToInsert(nKey);
-            if (InsertLeaf(ref node,nKey,nData)) { 
+            if (InsertLeaf(ref node,nKey,ref nData)) { 
                 _count++; if(_root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
             while(node.GetParent() != null)
             {
@@ -45,8 +45,31 @@ namespace Semka1
                     _count++; if(_root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
             }
             _root = node; _count++; if(_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
-        } 
-        private bool InsertLeaf(ref T23Node<TKey, T> node,TKey nKey, T nData) {
+        }
+        public bool Insert(TKey nKey, ref T nData)
+        {
+            if (_root == null)
+            {
+                _root = new T23Node<TKey, T>(nKey, nData);
+                _count++; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
+            }
+            ref var node = ref FindNodeToInsert(nKey);
+            if (InsertLeaf(ref node, nKey, ref nData))
+            {
+                _count++; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
+            }
+            while (node.GetParent() != null)
+            {
+                ref var nodeKid = ref node;
+                node = ref node.GetParent(); //caution with ref
+                if (InsertInternal(ref node, ref nodeKid) || node == null)
+                {
+                    _count++; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
+                }
+            }
+            _root = node; _count++; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
+        }
+        private bool InsertLeaf(ref T23Node<TKey, T> node,TKey nKey, ref T nData) {
             if (node.IsLeaf() && !node.Is3Node()) { // insert into this node easy; return true;
                 if (node.GetLeftKey().CompareTo(nKey) < 0) { node.SetRight(nKey,nData);return true;} // lkey < nkey
                 node.SetRight(node.GetLeftKey(),node.GetLeftData()); node.SetLeft(nKey, nData); return true; // nkey < lkey
@@ -149,18 +172,19 @@ namespace Semka1
             ref var node = ref FindNodeToDelete(key);
             if (!node.IsLeaf()) { node = ref DeleteSwitch(ref node, key); }//node switch with inordernext;
             if(DeleteLeaf(ref node,key)) { 
-                _count--; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
+                _count--; 
+                if (_count != 0 && _root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
 	
             while(node != null && node.GetParent() != null && node.GetParent().GetParent() != null)
             {
                 ref var parent = ref node.GetParent();
                 if(DeleteInternal(ref node.GetParent())) { 
-                    _count--; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
+                    _count--; if (_count != 0 && _root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
                 if (node != null) node = node.GetParent();
                 else node = parent;
             }
             SetRoot(node); //replace curr root with only child
-            _count--; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
+            _count--; if (_count != 0 && _root.GetParent() != null) SetRoot(_root.GetParent()); return true;
 	
         }
         private bool DeleteLeaf(ref T23Node<TKey, T> node, TKey key){

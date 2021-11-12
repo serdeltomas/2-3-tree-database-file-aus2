@@ -94,8 +94,8 @@ namespace Semka1
                 "Alexander" ,"Oliver" ,"Daniel" , "Lucas" ,"Matthew" ,"Aiden" , "Jackson" ,"Logan" ,"David" ,"Joseph" ,
                 "Samuel" ,"Henry" ,"Owen" ,"Sebastian" , "Gabriel" ,"Carter" ,"Jayden" ,"John" , "Luke" ,"Anthony"
             };
-            var rand = new Random(1);
-            //var rand = new Random();
+            //var rand = new Random(1);
+            var rand = new Random();
             
             var stromOsoby = new T23Tree<KeyInt,Osoba>();
             var cisla = new Int32[nOfInsertions+1];

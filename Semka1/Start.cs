@@ -8,8 +8,8 @@ namespace Semka1
         static void Main()
         {
             var test = new Test();
-            test.TestInsertInt(100000);
-            //test.TestDelete(100000,0.20);
+            test.TestInsertInt(20000);
+            //test.TestDelete(2000000,0.20);
             //test.TestDeleteBasic();
             // System.Console.WriteLine();
         }

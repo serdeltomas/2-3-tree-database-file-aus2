@@ -1,7 +1,7 @@
 ﻿
 namespace Semka1GUI
 {
-    partial class MainWindow
+    partial class osoba_vymaz_success
     {
         /// <summary>
         ///  Required designer variable.
@@ -79,6 +79,17 @@ namespace Semka1GUI
             this.hladaj_dat_od = new System.Windows.Forms.DateTimePicker();
             this.label15 = new System.Windows.Forms.Label();
             this.hladaj_dat_do = new System.Windows.Forms.DateTimePicker();
+            this.o03_rod_cislo = new System.Windows.Forms.TextBox();
+            this.o03_success = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.pcr_datum_testu = new System.Windows.Forms.DateTimePicker();
+            this.vymaz_success = new System.Windows.Forms.Label();
+            this.btn18 = new System.Windows.Forms.Button();
+            this.vymaz_pcr_id = new System.Windows.Forms.NumericUpDown();
+            this.btn19 = new System.Windows.Forms.Button();
+            this.vymaz_rod_cislo = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pcr_pracovisko)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pcr_okres)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pcr_kraj)).BeginInit();
@@ -88,22 +99,23 @@ namespace Semka1GUI
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_prac)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_okres)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_kraj)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vymaz_pcr_id)).BeginInit();
             this.SuspendLayout();
             // 
             // btn17
             // 
             this.btn17.Location = new System.Drawing.Point(536, 26);
             this.btn17.Name = "btn17";
-            this.btn17.Size = new System.Drawing.Size(75, 23);
+            this.btn17.Size = new System.Drawing.Size(92, 23);
             this.btn17.TabIndex = 3;
             this.btn17.Text = "Vloz Osobu";
             this.btn17.Click += new System.EventHandler(this.btn17_Click);
             // 
             // btn01
             // 
-            this.btn01.Location = new System.Drawing.Point(442, 115);
+            this.btn01.Location = new System.Drawing.Point(430, 116);
             this.btn01.Name = "btn01";
-            this.btn01.Size = new System.Drawing.Size(152, 23);
+            this.btn01.Size = new System.Drawing.Size(100, 23);
             this.btn01.TabIndex = 2;
             this.btn01.Text = "Vloz PCR test";
             this.btn01.UseVisualStyleBackColor = true;
@@ -163,7 +175,7 @@ namespace Semka1GUI
             this.osoba_datum_narodenia.Name = "osoba_datum_narodenia";
             this.osoba_datum_narodenia.Size = new System.Drawing.Size(200, 23);
             this.osoba_datum_narodenia.TabIndex = 10;
-            this.osoba_datum_narodenia.Value = new System.DateTime(2021, 10, 29, 0, 0, 0, 0);
+            this.osoba_datum_narodenia.Value = new System.DateTime(2021, 11, 12, 0, 0, 0, 0);
             // 
             // label4
             // 
@@ -177,7 +189,7 @@ namespace Semka1GUI
             // osoba_success
             // 
             this.osoba_success.AutoSize = true;
-            this.osoba_success.Location = new System.Drawing.Point(617, 30);
+            this.osoba_success.Location = new System.Drawing.Point(634, 29);
             this.osoba_success.Name = "osoba_success";
             this.osoba_success.Size = new System.Drawing.Size(19, 15);
             this.osoba_success.TabIndex = 12;
@@ -186,7 +198,7 @@ namespace Semka1GUI
             // pcr_success
             // 
             this.pcr_success.AutoSize = true;
-            this.pcr_success.Location = new System.Drawing.Point(600, 119);
+            this.pcr_success.Location = new System.Drawing.Point(536, 120);
             this.pcr_success.Name = "pcr_success";
             this.pcr_success.Size = new System.Drawing.Size(19, 15);
             this.pcr_success.TabIndex = 13;
@@ -294,13 +306,13 @@ namespace Semka1GUI
             // 
             this.pcr_poznamka.Location = new System.Drawing.Point(80, 116);
             this.pcr_poznamka.Name = "pcr_poznamka";
-            this.pcr_poznamka.Size = new System.Drawing.Size(356, 23);
+            this.pcr_poznamka.Size = new System.Drawing.Size(138, 23);
             this.pcr_poznamka.TabIndex = 24;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(118, 156);
+            this.label10.Location = new System.Drawing.Point(118, 215);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(72, 15);
             this.label10.TabIndex = 29;
@@ -308,9 +320,9 @@ namespace Semka1GUI
             // 
             // gen_testy
             // 
-            this.gen_testy.Location = new System.Drawing.Point(118, 175);
+            this.gen_testy.Location = new System.Drawing.Point(118, 234);
             this.gen_testy.Maximum = new decimal(new int[] {
-            10000,
+            500000,
             0,
             0,
             0});
@@ -321,7 +333,7 @@ namespace Semka1GUI
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 156);
+            this.label11.Location = new System.Drawing.Point(12, 215);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(66, 15);
             this.label11.TabIndex = 27;
@@ -329,9 +341,9 @@ namespace Semka1GUI
             // 
             // gen_osoby
             // 
-            this.gen_osoby.Location = new System.Drawing.Point(12, 175);
+            this.gen_osoby.Location = new System.Drawing.Point(12, 234);
             this.gen_osoby.Maximum = new decimal(new int[] {
-            10000,
+            500000,
             0,
             0,
             0});
@@ -341,7 +353,7 @@ namespace Semka1GUI
             // 
             // btn_gen
             // 
-            this.btn_gen.Location = new System.Drawing.Point(224, 175);
+            this.btn_gen.Location = new System.Drawing.Point(224, 234);
             this.btn_gen.Name = "btn_gen";
             this.btn_gen.Size = new System.Drawing.Size(111, 23);
             this.btn_gen.TabIndex = 30;
@@ -351,7 +363,7 @@ namespace Semka1GUI
             // gen_success
             // 
             this.gen_success.AutoSize = true;
-            this.gen_success.Location = new System.Drawing.Point(341, 179);
+            this.gen_success.Location = new System.Drawing.Point(341, 238);
             this.gen_success.Name = "gen_success";
             this.gen_success.Size = new System.Drawing.Size(19, 15);
             this.gen_success.TabIndex = 31;
@@ -360,7 +372,7 @@ namespace Semka1GUI
             // o02_success
             // 
             this.o02_success.AutoSize = true;
-            this.o02_success.Location = new System.Drawing.Point(341, 240);
+            this.o02_success.Location = new System.Drawing.Point(341, 298);
             this.o02_success.Name = "o02_success";
             this.o02_success.Size = new System.Drawing.Size(19, 15);
             this.o02_success.TabIndex = 37;
@@ -368,7 +380,7 @@ namespace Semka1GUI
             // 
             // btn02
             // 
-            this.btn02.Location = new System.Drawing.Point(230, 236);
+            this.btn02.Location = new System.Drawing.Point(230, 295);
             this.btn02.Name = "btn02";
             this.btn02.Size = new System.Drawing.Size(105, 23);
             this.btn02.TabIndex = 36;
@@ -378,7 +390,7 @@ namespace Semka1GUI
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(118, 217);
+            this.label13.Location = new System.Drawing.Point(118, 275);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(106, 15);
             this.label13.TabIndex = 35;
@@ -387,7 +399,7 @@ namespace Semka1GUI
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(12, 217);
+            this.label14.Location = new System.Drawing.Point(12, 276);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(87, 15);
             this.label14.TabIndex = 33;
@@ -395,7 +407,7 @@ namespace Semka1GUI
             // 
             // o02_pcr_id
             // 
-            this.o02_pcr_id.Location = new System.Drawing.Point(12, 236);
+            this.o02_pcr_id.Location = new System.Drawing.Point(12, 295);
             this.o02_pcr_id.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -407,14 +419,14 @@ namespace Semka1GUI
             // 
             // o02_rod_cislo
             // 
-            this.o02_rod_cislo.Location = new System.Drawing.Point(118, 237);
+            this.o02_rod_cislo.Location = new System.Drawing.Point(118, 295);
             this.o02_rod_cislo.Name = "o02_rod_cislo";
             this.o02_rod_cislo.Size = new System.Drawing.Size(106, 23);
             this.o02_rod_cislo.TabIndex = 38;
             // 
             // btn_dummy
             // 
-            this.btn_dummy.Location = new System.Drawing.Point(12, 265);
+            this.btn_dummy.Location = new System.Drawing.Point(774, 606);
             this.btn_dummy.Name = "btn_dummy";
             this.btn_dummy.Size = new System.Drawing.Size(75, 23);
             this.btn_dummy.TabIndex = 39;
@@ -424,7 +436,7 @@ namespace Semka1GUI
             // 
             // btn_vypis_vsetko
             // 
-            this.btn_vypis_vsetko.Location = new System.Drawing.Point(93, 266);
+            this.btn_vypis_vsetko.Location = new System.Drawing.Point(124, 357);
             this.btn_vypis_vsetko.Name = "btn_vypis_vsetko";
             this.btn_vypis_vsetko.Size = new System.Drawing.Size(85, 23);
             this.btn_vypis_vsetko.TabIndex = 40;
@@ -435,7 +447,7 @@ namespace Semka1GUI
             // hladaj_iba_pozitivne
             // 
             this.hladaj_iba_pozitivne.AutoSize = true;
-            this.hladaj_iba_pozitivne.Location = new System.Drawing.Point(12, 349);
+            this.hladaj_iba_pozitivne.Location = new System.Drawing.Point(12, 446);
             this.hladaj_iba_pozitivne.Name = "hladaj_iba_pozitivne";
             this.hladaj_iba_pozitivne.Size = new System.Drawing.Size(130, 19);
             this.hladaj_iba_pozitivne.TabIndex = 51;
@@ -445,7 +457,7 @@ namespace Semka1GUI
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(224, 301);
+            this.label16.Location = new System.Drawing.Point(224, 398);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(86, 15);
             this.label16.TabIndex = 48;
@@ -453,7 +465,7 @@ namespace Semka1GUI
             // 
             // hladaj_prac
             // 
-            this.hladaj_prac.Location = new System.Drawing.Point(224, 320);
+            this.hladaj_prac.Location = new System.Drawing.Point(224, 417);
             this.hladaj_prac.Maximum = new decimal(new int[] {
             150,
             0,
@@ -466,7 +478,7 @@ namespace Semka1GUI
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(118, 301);
+            this.label17.Location = new System.Drawing.Point(118, 398);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(59, 15);
             this.label17.TabIndex = 46;
@@ -474,7 +486,7 @@ namespace Semka1GUI
             // 
             // hladaj_okres
             // 
-            this.hladaj_okres.Location = new System.Drawing.Point(118, 320);
+            this.hladaj_okres.Location = new System.Drawing.Point(118, 417);
             this.hladaj_okres.Maximum = new decimal(new int[] {
             79,
             0,
@@ -487,7 +499,7 @@ namespace Semka1GUI
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(12, 301);
+            this.label18.Location = new System.Drawing.Point(12, 398);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(49, 15);
             this.label18.TabIndex = 44;
@@ -495,7 +507,7 @@ namespace Semka1GUI
             // 
             // hladaj_kraj
             // 
-            this.hladaj_kraj.Location = new System.Drawing.Point(12, 320);
+            this.hladaj_kraj.Location = new System.Drawing.Point(12, 417);
             this.hladaj_kraj.Maximum = new decimal(new int[] {
             8,
             0,
@@ -508,7 +520,7 @@ namespace Semka1GUI
             // hladaj_success
             // 
             this.hladaj_success.AutoSize = true;
-            this.hladaj_success.Location = new System.Drawing.Point(276, 353);
+            this.hladaj_success.Location = new System.Drawing.Point(276, 450);
             this.hladaj_success.Name = "hladaj_success";
             this.hladaj_success.Size = new System.Drawing.Size(19, 15);
             this.hladaj_success.TabIndex = 42;
@@ -516,7 +528,7 @@ namespace Semka1GUI
             // 
             // btn_hladaj_testy_datum
             // 
-            this.btn_hladaj_testy_datum.Location = new System.Drawing.Point(148, 349);
+            this.btn_hladaj_testy_datum.Location = new System.Drawing.Point(148, 446);
             this.btn_hladaj_testy_datum.Name = "btn_hladaj_testy_datum";
             this.btn_hladaj_testy_datum.Size = new System.Drawing.Size(122, 23);
             this.btn_hladaj_testy_datum.TabIndex = 41;
@@ -527,7 +539,7 @@ namespace Semka1GUI
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(330, 301);
+            this.label12.Location = new System.Drawing.Point(330, 398);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(60, 15);
             this.label12.TabIndex = 53;
@@ -535,7 +547,7 @@ namespace Semka1GUI
             // 
             // hladaj_dat_od
             // 
-            this.hladaj_dat_od.Location = new System.Drawing.Point(330, 320);
+            this.hladaj_dat_od.Location = new System.Drawing.Point(330, 417);
             this.hladaj_dat_od.Name = "hladaj_dat_od";
             this.hladaj_dat_od.Size = new System.Drawing.Size(200, 23);
             this.hladaj_dat_od.TabIndex = 52;
@@ -544,7 +556,7 @@ namespace Semka1GUI
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(536, 301);
+            this.label15.Location = new System.Drawing.Point(536, 398);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(60, 15);
             this.label15.TabIndex = 55;
@@ -552,17 +564,126 @@ namespace Semka1GUI
             // 
             // hladaj_dat_do
             // 
-            this.hladaj_dat_do.Location = new System.Drawing.Point(536, 320);
+            this.hladaj_dat_do.Location = new System.Drawing.Point(536, 417);
             this.hladaj_dat_do.Name = "hladaj_dat_do";
             this.hladaj_dat_do.Size = new System.Drawing.Size(200, 23);
             this.hladaj_dat_do.TabIndex = 54;
-            this.hladaj_dat_do.Value = new System.DateTime(2021, 11, 2, 23, 59, 59, 0);
+            this.hladaj_dat_do.Value = new System.DateTime(2021, 11, 12, 0, 0, 0, 0);
             // 
-            // MainWindow
+            // o03_rod_cislo
+            // 
+            this.o03_rod_cislo.Location = new System.Drawing.Point(12, 358);
+            this.o03_rod_cislo.Name = "o03_rod_cislo";
+            this.o03_rod_cislo.Size = new System.Drawing.Size(106, 23);
+            this.o03_rod_cislo.TabIndex = 58;
+            // 
+            // o03_success
+            // 
+            this.o03_success.AutoSize = true;
+            this.o03_success.Location = new System.Drawing.Point(215, 361);
+            this.o03_success.Name = "o03_success";
+            this.o03_success.Size = new System.Drawing.Size(19, 15);
+            this.o03_success.TabIndex = 57;
+            this.o03_success.Text = "    ";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(12, 338);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(106, 15);
+            this.label20.TabIndex = 56;
+            this.label20.Text = "Rod. cislo pacienta";
+            // 
+            // pcr_datum_testu
+            // 
+            this.pcr_datum_testu.Location = new System.Drawing.Point(224, 116);
+            this.pcr_datum_testu.Name = "pcr_datum_testu";
+            this.pcr_datum_testu.Size = new System.Drawing.Size(200, 23);
+            this.pcr_datum_testu.TabIndex = 59;
+            this.pcr_datum_testu.Value = new System.DateTime(2021, 11, 12, 0, 0, 0, 0);
+            // 
+            // vymaz_success
+            // 
+            this.vymaz_success.AutoSize = true;
+            this.vymaz_success.Location = new System.Drawing.Point(436, 175);
+            this.vymaz_success.Name = "vymaz_success";
+            this.vymaz_success.Size = new System.Drawing.Size(19, 15);
+            this.vymaz_success.TabIndex = 63;
+            this.vymaz_success.Text = "    ";
+            // 
+            // btn18
+            // 
+            this.btn18.Location = new System.Drawing.Point(330, 171);
+            this.btn18.Name = "btn18";
+            this.btn18.Size = new System.Drawing.Size(100, 23);
+            this.btn18.TabIndex = 62;
+            this.btn18.Text = "Vymaz PCR test";
+            this.btn18.UseVisualStyleBackColor = true;
+            this.btn18.Click += new System.EventHandler(this.btn18_Click);
+            // 
+            // vymaz_pcr_id
+            // 
+            this.vymaz_pcr_id.Location = new System.Drawing.Point(224, 173);
+            this.vymaz_pcr_id.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.vymaz_pcr_id.Name = "vymaz_pcr_id";
+            this.vymaz_pcr_id.Size = new System.Drawing.Size(100, 23);
+            this.vymaz_pcr_id.TabIndex = 64;
+            // 
+            // btn19
+            // 
+            this.btn19.Location = new System.Drawing.Point(118, 173);
+            this.btn19.Name = "btn19";
+            this.btn19.Size = new System.Drawing.Size(100, 23);
+            this.btn19.TabIndex = 60;
+            this.btn19.Text = "Vymaz Osobu";
+            this.btn19.Click += new System.EventHandler(this.btn19_Click);
+            // 
+            // vymaz_rod_cislo
+            // 
+            this.vymaz_rod_cislo.Location = new System.Drawing.Point(12, 173);
+            this.vymaz_rod_cislo.Name = "vymaz_rod_cislo";
+            this.vymaz_rod_cislo.Size = new System.Drawing.Size(100, 23);
+            this.vymaz_rod_cislo.TabIndex = 65;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(12, 155);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(68, 15);
+            this.label19.TabIndex = 66;
+            this.label19.Text = "Rodne cislo";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(224, 155);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(87, 15);
+            this.label21.TabIndex = 67;
+            this.label21.Text = "Cislo PCR testu";
+            // 
+            // osoba_vymaz_success
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(861, 641);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.vymaz_rod_cislo);
+            this.Controls.Add(this.vymaz_pcr_id);
+            this.Controls.Add(this.vymaz_success);
+            this.Controls.Add(this.btn18);
+            this.Controls.Add(this.btn19);
+            this.Controls.Add(this.pcr_datum_testu);
+            this.Controls.Add(this.o03_rod_cislo);
+            this.Controls.Add(this.o03_success);
+            this.Controls.Add(this.label20);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.hladaj_dat_do);
             this.Controls.Add(this.label12);
@@ -613,7 +734,7 @@ namespace Semka1GUI
             this.Controls.Add(this.osoba_meno);
             this.Controls.Add(this.btn01);
             this.Controls.Add(this.btn17);
-            this.Name = "MainWindow";
+            this.Name = "osoba_vymaz_success";
             this.Text = "AUS2 Semestrálna práca 1 Serdel Tomas";
             ((System.ComponentModel.ISupportInitialize)(this.pcr_pracovisko)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pcr_okres)).EndInit();
@@ -624,6 +745,7 @@ namespace Semka1GUI
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_prac)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_okres)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_kraj)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vymaz_pcr_id)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -680,6 +802,17 @@ namespace Semka1GUI
         private System.Windows.Forms.DateTimePicker hladaj_dat_od;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.DateTimePicker hladaj_dat_do;
+        private System.Windows.Forms.TextBox o03_rod_cislo;
+        private System.Windows.Forms.Label o03_success;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.DateTimePicker pcr_datum_testu;
+        private System.Windows.Forms.Label vymaz_success;
+        private System.Windows.Forms.Button btn18;
+        private System.Windows.Forms.NumericUpDown vymaz_pcr_id;
+        private System.Windows.Forms.Button btn19;
+        private System.Windows.Forms.TextBox vymaz_rod_cislo;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label21;
     }
 }
 
