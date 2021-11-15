@@ -90,6 +90,21 @@ namespace Semka1GUI
             this.vymaz_rod_cislo = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
+            this.btn_file_save = new System.Windows.Forms.Button();
+            this.btn_file_read = new System.Windows.Forms.Button();
+            this.file_success = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.chori_okres = new System.Windows.Forms.NumericUpDown();
+            this.label23 = new System.Windows.Forms.Label();
+            this.chori_kraj = new System.Windows.Forms.NumericUpDown();
+            this.label24 = new System.Windows.Forms.Label();
+            this.chori_datum = new System.Windows.Forms.DateTimePicker();
+            this.label25 = new System.Windows.Forms.Label();
+            this.chori_pocet_dni = new System.Windows.Forms.NumericUpDown();
+            this.chori_success = new System.Windows.Forms.Label();
+            this.btn_chori = new System.Windows.Forms.Button();
+            this.btn_o14_chori_kraj = new System.Windows.Forms.Button();
+            this.btn_o13_chori_okres = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pcr_pracovisko)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pcr_okres)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pcr_kraj)).BeginInit();
@@ -100,6 +115,9 @@ namespace Semka1GUI
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_okres)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_kraj)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vymaz_pcr_id)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chori_okres)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chori_kraj)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chori_pocet_dni)).BeginInit();
             this.SuspendLayout();
             // 
             // btn17
@@ -426,17 +444,18 @@ namespace Semka1GUI
             // 
             // btn_dummy
             // 
-            this.btn_dummy.Location = new System.Drawing.Point(774, 606);
+            this.btn_dummy.Location = new System.Drawing.Point(774, 589);
             this.btn_dummy.Name = "btn_dummy";
             this.btn_dummy.Size = new System.Drawing.Size(75, 23);
             this.btn_dummy.TabIndex = 39;
             this.btn_dummy.Text = "Dummy";
             this.btn_dummy.UseVisualStyleBackColor = true;
+            this.btn_dummy.Visible = false;
             this.btn_dummy.Click += new System.EventHandler(this.btn_dummy_Click);
             // 
             // btn_vypis_vsetko
             // 
-            this.btn_vypis_vsetko.Location = new System.Drawing.Point(124, 357);
+            this.btn_vypis_vsetko.Location = new System.Drawing.Point(124, 354);
             this.btn_vypis_vsetko.Name = "btn_vypis_vsetko";
             this.btn_vypis_vsetko.Size = new System.Drawing.Size(85, 23);
             this.btn_vypis_vsetko.TabIndex = 40;
@@ -572,7 +591,7 @@ namespace Semka1GUI
             // 
             // o03_rod_cislo
             // 
-            this.o03_rod_cislo.Location = new System.Drawing.Point(12, 358);
+            this.o03_rod_cislo.Location = new System.Drawing.Point(12, 355);
             this.o03_rod_cislo.Name = "o03_rod_cislo";
             this.o03_rod_cislo.Size = new System.Drawing.Size(106, 23);
             this.o03_rod_cislo.TabIndex = 58;
@@ -580,7 +599,7 @@ namespace Semka1GUI
             // o03_success
             // 
             this.o03_success.AutoSize = true;
-            this.o03_success.Location = new System.Drawing.Point(215, 361);
+            this.o03_success.Location = new System.Drawing.Point(215, 358);
             this.o03_success.Name = "o03_success";
             this.o03_success.Size = new System.Drawing.Size(19, 15);
             this.o03_success.TabIndex = 57;
@@ -589,7 +608,7 @@ namespace Semka1GUI
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(12, 338);
+            this.label20.Location = new System.Drawing.Point(12, 335);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(106, 15);
             this.label20.TabIndex = 56;
@@ -668,11 +687,174 @@ namespace Semka1GUI
             this.label21.TabIndex = 67;
             this.label21.Text = "Cislo PCR testu";
             // 
+            // btn_file_save
+            // 
+            this.btn_file_save.Location = new System.Drawing.Point(12, 589);
+            this.btn_file_save.Name = "btn_file_save";
+            this.btn_file_save.Size = new System.Drawing.Size(113, 23);
+            this.btn_file_save.TabIndex = 68;
+            this.btn_file_save.Text = "Uloz do suboru";
+            this.btn_file_save.UseVisualStyleBackColor = true;
+            this.btn_file_save.Click += new System.EventHandler(this.btn_file_save_Click);
+            // 
+            // btn_file_read
+            // 
+            this.btn_file_read.Location = new System.Drawing.Point(131, 589);
+            this.btn_file_read.Name = "btn_file_read";
+            this.btn_file_read.Size = new System.Drawing.Size(113, 23);
+            this.btn_file_read.TabIndex = 69;
+            this.btn_file_read.Text = "Nacitaj zo suboru";
+            this.btn_file_read.UseVisualStyleBackColor = true;
+            this.btn_file_read.Click += new System.EventHandler(this.btn_file_read_Click);
+            // 
+            // file_success
+            // 
+            this.file_success.AutoSize = true;
+            this.file_success.Location = new System.Drawing.Point(250, 593);
+            this.file_success.Name = "file_success";
+            this.file_success.Size = new System.Drawing.Size(19, 15);
+            this.file_success.TabIndex = 70;
+            this.file_success.Text = "    ";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(118, 491);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(59, 15);
+            this.label22.TabIndex = 74;
+            this.label22.Text = "Okres (ID)";
+            // 
+            // chori_okres
+            // 
+            this.chori_okres.Location = new System.Drawing.Point(118, 510);
+            this.chori_okres.Maximum = new decimal(new int[] {
+            79,
+            0,
+            0,
+            0});
+            this.chori_okres.Name = "chori_okres";
+            this.chori_okres.Size = new System.Drawing.Size(100, 23);
+            this.chori_okres.TabIndex = 73;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(12, 491);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(49, 15);
+            this.label23.TabIndex = 72;
+            this.label23.Text = "Kraj (ID)";
+            // 
+            // chori_kraj
+            // 
+            this.chori_kraj.Location = new System.Drawing.Point(12, 510);
+            this.chori_kraj.Maximum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.chori_kraj.Name = "chori_kraj";
+            this.chori_kraj.Size = new System.Drawing.Size(100, 23);
+            this.chori_kraj.TabIndex = 71;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(330, 491);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(43, 15);
+            this.label24.TabIndex = 78;
+            this.label24.Text = "Datum";
+            // 
+            // chori_datum
+            // 
+            this.chori_datum.Location = new System.Drawing.Point(330, 510);
+            this.chori_datum.Name = "chori_datum";
+            this.chori_datum.Size = new System.Drawing.Size(200, 23);
+            this.chori_datum.TabIndex = 77;
+            this.chori_datum.Value = new System.DateTime(2021, 11, 15, 0, 0, 0, 0);
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(224, 491);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(57, 15);
+            this.label25.TabIndex = 76;
+            this.label25.Text = "Pocet dni";
+            // 
+            // chori_pocet_dni
+            // 
+            this.chori_pocet_dni.Location = new System.Drawing.Point(224, 510);
+            this.chori_pocet_dni.Maximum = new decimal(new int[] {
+            500000,
+            0,
+            0,
+            0});
+            this.chori_pocet_dni.Name = "chori_pocet_dni";
+            this.chori_pocet_dni.Size = new System.Drawing.Size(100, 23);
+            this.chori_pocet_dni.TabIndex = 75;
+            // 
+            // chori_success
+            // 
+            this.chori_success.AutoSize = true;
+            this.chori_success.Location = new System.Drawing.Point(536, 543);
+            this.chori_success.Name = "chori_success";
+            this.chori_success.Size = new System.Drawing.Size(19, 15);
+            this.chori_success.TabIndex = 80;
+            this.chori_success.Text = "    ";
+            // 
+            // btn_chori
+            // 
+            this.btn_chori.Location = new System.Drawing.Point(536, 512);
+            this.btn_chori.Name = "btn_chori";
+            this.btn_chori.Size = new System.Drawing.Size(100, 23);
+            this.btn_chori.TabIndex = 79;
+            this.btn_chori.Text = "Vypis chorych";
+            this.btn_chori.UseVisualStyleBackColor = true;
+            this.btn_chori.Click += new System.EventHandler(this.btn_chori_Click);
+            // 
+            // btn_o14_chori_kraj
+            // 
+            this.btn_o14_chori_kraj.Location = new System.Drawing.Point(13, 539);
+            this.btn_o14_chori_kraj.Name = "btn_o14_chori_kraj";
+            this.btn_o14_chori_kraj.Size = new System.Drawing.Size(165, 23);
+            this.btn_o14_chori_kraj.TabIndex = 81;
+            this.btn_o14_chori_kraj.Text = "Vypis krajov podla chorych";
+            this.btn_o14_chori_kraj.UseVisualStyleBackColor = true;
+            this.btn_o14_chori_kraj.Click += new System.EventHandler(this.btn_o14_chori_kraj_Click);
+            // 
+            // btn_o13_chori_okres
+            // 
+            this.btn_o13_chori_okres.Location = new System.Drawing.Point(184, 539);
+            this.btn_o13_chori_okres.Name = "btn_o13_chori_okres";
+            this.btn_o13_chori_okres.Size = new System.Drawing.Size(176, 23);
+            this.btn_o13_chori_okres.TabIndex = 82;
+            this.btn_o13_chori_okres.Text = "Vypis okresov podla chorych";
+            this.btn_o13_chori_okres.UseVisualStyleBackColor = true;
+            this.btn_o13_chori_okres.Click += new System.EventHandler(this.btn_o13_chori_okres_Click);
+            // 
             // osoba_vymaz_success
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(861, 641);
+            this.ClientSize = new System.Drawing.Size(861, 624);
+            this.Controls.Add(this.btn_o13_chori_okres);
+            this.Controls.Add(this.btn_o14_chori_kraj);
+            this.Controls.Add(this.chori_success);
+            this.Controls.Add(this.btn_chori);
+            this.Controls.Add(this.label24);
+            this.Controls.Add(this.chori_datum);
+            this.Controls.Add(this.label25);
+            this.Controls.Add(this.chori_pocet_dni);
+            this.Controls.Add(this.label22);
+            this.Controls.Add(this.chori_okres);
+            this.Controls.Add(this.label23);
+            this.Controls.Add(this.chori_kraj);
+            this.Controls.Add(this.file_success);
+            this.Controls.Add(this.btn_file_read);
+            this.Controls.Add(this.btn_file_save);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.vymaz_rod_cislo);
@@ -746,6 +928,9 @@ namespace Semka1GUI
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_okres)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hladaj_kraj)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vymaz_pcr_id)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chori_okres)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chori_kraj)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chori_pocet_dni)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -813,6 +998,21 @@ namespace Semka1GUI
         private System.Windows.Forms.TextBox vymaz_rod_cislo;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Button btn_file_save;
+        private System.Windows.Forms.Button btn_file_read;
+        private System.Windows.Forms.Label file_success;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.NumericUpDown chori_okres;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.NumericUpDown chori_kraj;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.DateTimePicker chori_datum;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.NumericUpDown chori_pocet_dni;
+        private System.Windows.Forms.Label chori_success;
+        private System.Windows.Forms.Button btn_chori;
+        private System.Windows.Forms.Button btn_o14_chori_kraj;
+        private System.Windows.Forms.Button btn_o13_chori_okres;
     }
 }
 

@@ -119,8 +119,9 @@ namespace Semka1GUI
 
         private void btn_dummy_Click(object sender, EventArgs e)
         {
-            var f = new WindowOut("haaha\ntext here");
-            f.Text = "ugabuga";
+            //_app.ReadFromFiles();
+            var f = new WindowOut("DONE");
+            f.Text = "Files saved";
             f.Show();
         }
 
@@ -310,6 +311,99 @@ namespace Semka1GUI
                 return;
             }
             vymaz_success.Text = "zadane cislo testu bolo odstranene z databazy";
+            return;
+        }
+
+        private void btn_file_save_Click(object sender, EventArgs e)
+        {
+            _app.SaveToFiles();
+            file_success.Text = "uspesne ulozene do suboru"; 
+        }
+
+        private void btn_file_read_Click(object sender, EventArgs e)
+        {
+            _app.ReadFromFiles();
+            file_success.Text = "uspesne nacitane zo suboru";
+        }
+
+        private void btn_chori_Click(object sender, EventArgs e)
+        {
+            if (chori_kraj.Value != 0 && chori_okres.Value != 0 )
+            {
+                chori_success.Text = "vyplnte ziaden alebo prave jeden z udajov(kraj/okres)";
+                return;
+            }
+            if(chori_kraj.Value == 0 && chori_okres.Value == 0)
+            {
+                string vypis = "";
+                if (!_app.O12_VypisVsetkychChorych((int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+                {
+                    chori_success.Text = "v systeme nie su ziadne testy";
+                    return;
+                }
+                var f = new WindowOut(vypis);
+                f.Text = "Vypis vsetkych chorych v danom casovom obdobi";
+                f.Show();
+                chori_success.Text = "vypis je v novom okne";
+                return;
+            }
+            if (chori_kraj.Value != 0 && chori_okres.Value == 0)
+            {
+                string vypis = "";
+                if (!_app.O11_VypisChorychKraj((int)(chori_kraj.Value), (int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+                {
+                    chori_success.Text = "kraj so zadanym ID nema ziadne zaznamy";
+                    return;
+                }
+                var f = new WindowOut(vypis);
+                f.Text = "Vypis vsetkych chorych v danom kraji v danom casovom obdobi";
+                f.Show();
+                chori_success.Text = "vypis je v novom okne";
+                return;
+            }
+            if (chori_okres.Value != 0 && chori_kraj.Value == 0)
+            {
+                string vypis = "";
+                if (!_app.O10_VypisChorychOkres((int)(chori_okres.Value), (int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+                {
+                    chori_success.Text = "okres so zadanym ID nema ziadne zaznamy";
+                    return;
+                }
+                var f = new WindowOut(vypis);
+                f.Text = "Vypis vsetkych chorych v danom okrese v danom casovom obdobi";
+                f.Show();
+                chori_success.Text = "vypis je v novom okne";
+                return;
+            }
+        }
+
+        private void btn_o14_chori_kraj_Click(object sender, EventArgs e)
+        {
+            string vypis = "";
+            if (!_app.O14_VypisKrajovPodlaChorych((int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+            {
+                chori_success.Text = "nastala chyba";
+                return;
+            }
+            var f = new WindowOut(vypis);
+            f.Text = "Vypis krajov podla poctu chorych v danom casovom obdobi";
+            f.Show();
+            chori_success.Text = "vypis je v novom okne";
+            return;
+        }
+
+        private void btn_o13_chori_okres_Click(object sender, EventArgs e)
+        {
+            string vypis = "";
+            if (!_app.O13_VypisOkresovPodlaChorych((int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+            {
+                chori_success.Text = "nastala chyba";
+                return;
+            }
+            var f = new WindowOut(vypis);
+            f.Text = "Vypis okresov podla poctu chorych v danom casovom obdobi";
+            f.Show();
+            chori_success.Text = "vypis je v novom okne";
             return;
         }
     }

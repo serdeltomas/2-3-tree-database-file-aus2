@@ -2,7 +2,7 @@
 
 namespace Semka1
 {
-    class Osoba
+    class Osoba : ICsv
     {
         private string _meno;
         private string _priezvisko;
@@ -24,11 +24,6 @@ namespace Semka1
             _rodCislo = pRodCislo;
             _datNar = pDatNar;
         }
-
-        /*public override string ToString()
-        {
-            return _rodCislo;
-        } */
         public override string ToString()
         {
             return "  rod. cislo: " + _rodCislo + "   dat. narodenia: " + _datNar + "\t meno: " + _meno + "\t priezvisko: " + _priezvisko + "\n";
@@ -45,6 +40,11 @@ namespace Semka1
         public T23Tree<KeyDat, PcrTest> GetTree()
         {
             return _stromPcr;
+        }
+
+        public string ToStringCsv()
+        {
+            return _rodCislo + ";" + _datNar + ";" + _meno + ";" + _priezvisko;
         }
     }
 }

@@ -2,16 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Semka1
 {
-    public class T23Tree<TKey, T> where TKey: IComparable<TKey>
+    public class T23Tree<TKey, T> where TKey : IComparable<TKey> where T : ICsv
     {
         private T23Node<TKey, T> _root;
         //private int _depth;//not counting atm
@@ -471,10 +473,31 @@ namespace Semka1
         public string VypisVsetko()
         {
             if (_root == null) return "";
-            string ret = "pocet: " + Count() + "\n";
+            var sb = new StringBuilder();
+            sb.Append("pocet: " + Count() + "\n");
             var inorder = InOrder();
-            foreach (T io in inorder) ret += io.ToString();
-            return ret;
+            foreach (T io in inorder) sb.Append(io.ToString());
+            return sb.ToString();
+        }
+        public DataTable ToDataTable()
+        {
+            DataTable table = new DataTable();
+            //columns  
+            table.Columns.Add("ID", typeof(int));
+            table.Columns.Add("NAME", typeof(string));
+            table.Columns.Add("CITY", typeof(string));
+
+            //data  
+            table.Rows.Add(111, "Devesh", "Ghaziabad");
+            table.Rows.Add(222, "ROLI", "KANPUR");
+            table.Rows.Add(102, "ROLI", "MAINPURI");
+            table.Rows.Add(212, "DEVESH", "KANPUR");
+            table.Rows.Add(102, "NIKHIL", "GZB");
+            table.Rows.Add(212, "HIMANSHU", "NOIDa");
+            table.Rows.Add(102, "AVINASH", "NOIDa");
+            table.Rows.Add(212, "BHUPPI", "GZB");
+
+            return table;
         }
         //----------------------------------------traversals--------------------------------------
         public void InOrderRecursion(T23Node<TKey, T> n, ref ArrayList ll)

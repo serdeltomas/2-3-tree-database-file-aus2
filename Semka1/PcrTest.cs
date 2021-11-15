@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Semka1
 {
-    class PcrTest
+    class PcrTest: ICsv
     {
         private int _kodPracoviska;
         private int _kodPcr;
@@ -62,6 +62,12 @@ namespace Semka1
         public int GetPrac() { return _kodPracoviska; }
         public DateTime GetDat() { return _datTestu; }
         public string GetRodCis() { return _rodCislo; }
+
+        public string ToStringCsv()
+        {
+            return _kodPcr + ";" + _kodKraja + ";" + _kodOkresu + ";" + _kodPracoviska + ";" 
+                + _datTestu + ";" + _vyslTestu + ";" + _poznamka + ";" + _rodCislo;
+        }
     }
 
     

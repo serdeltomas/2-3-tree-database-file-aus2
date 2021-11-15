@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Semka1
 {
-    class Miesto
+    class Miesto : ICsv
     {
         private int _cislo;//not used
         private T23Tree<KeyDat, PcrTest> _stromPcr = new T23Tree<KeyDat, PcrTest>();
@@ -25,6 +25,11 @@ namespace Semka1
         public T23Tree<KeyDat, PcrTest> GetTree()
         {
             return _stromPcr;
+        }
+
+        public string ToStringCsv()
+        {
+            return _cislo.ToString();
         }
     }
     

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace Semka1
 {
@@ -14,6 +16,9 @@ namespace Semka1
         private T23Tree<KeyInt, Miesto> _strPracoviskoPcrDatum = new T23Tree<KeyInt, Miesto>();
         //private List<KeyInt> _pcrIdList = new List<KeyInt>();
         private List<string> _rodCisList = new List<string>();
+        private int KRAJCOUNT = 9; // 1-8
+        private int OKRESCOUNT = 80;// 1-79
+        private int PRACOVISKOCOUNT = 151; // 1-150
         public App()
         {
         }
@@ -36,17 +41,60 @@ namespace Semka1
             _strPcrID.Insert(new KeyInt(kodPcr), pcrTest);
             _strOsobyPcrDatum.GetData(new KeyStr(pRodCislo)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest);
             if (_strKrajPcrDatum.Contains(new KeyInt(pKodKraja))) 
-                _strKrajPcrDatum.GetDataRef(new KeyInt(pKodKraja)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest);
+                _strKrajPcrDatum.GetData(new KeyInt(pKodKraja)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest);
             else { _strKrajPcrDatum.Insert(new KeyInt(pKodKraja), new Miesto(pKodKraja));
-                _strKrajPcrDatum.GetDataRef(new KeyInt(pKodKraja)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest); }
-            if (_strOkresPcrDatum.Contains(new KeyInt(pKodOkresu))) _strOkresPcrDatum.GetDataRef(
-                new KeyInt(pKodOkresu)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest);
+                _strKrajPcrDatum.GetData(new KeyInt(pKodKraja)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest); }
+            if (_strOkresPcrDatum.Contains(new KeyInt(pKodOkresu))) 
+                _strOkresPcrDatum.GetData(new KeyInt(pKodOkresu)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest);
             else { _strOkresPcrDatum.Insert(new KeyInt(pKodOkresu), new Miesto(pKodOkresu));
-                _strOkresPcrDatum.GetDataRef(new KeyInt(pKodOkresu)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest); }
-            if (_strPracoviskoPcrDatum.Contains(new KeyInt(pKodPracoviska))) _strPracoviskoPcrDatum.GetDataRef(
-                new KeyInt(pKodPracoviska)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest);
+                _strOkresPcrDatum.GetData(new KeyInt(pKodOkresu)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest); }
+            if (_strPracoviskoPcrDatum.Contains(new KeyInt(pKodPracoviska))) 
+                _strPracoviskoPcrDatum.GetData(new KeyInt(pKodPracoviska)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest);
             else { _strPracoviskoPcrDatum.Insert(new KeyInt(pKodPracoviska), new Miesto(pKodPracoviska));
-                _strPracoviskoPcrDatum.GetDataRef(new KeyInt(pKodPracoviska)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest); }
+                _strPracoviskoPcrDatum.GetData(new KeyInt(pKodPracoviska)).GetTree().Insert(new KeyDat(pDatTestu, kodPcr), pcrTest); }
+            return true;
+        }
+        public bool O01_VlozPCR(int pKodPcr, int pKodKraja, int pKodOkresu, int pKodPracoviska, string pRodCislo,
+           DateTime pDatTestu, bool pVyslTestu, string pPoznamka)
+        {
+            //check if rod_cislo is in database
+            if (!_strOsobyPcrDatum.Contains(new KeyStr(pRodCislo))) { return false; }
+            if (_strPcrID != null && _strPcrID.Contains(new KeyInt(pKodPcr))) // if you read from file twice
+            {
+                var rand = new Random();
+                do
+                {
+                    pKodPcr = rand.Next(1, Int32.MaxValue); //cisla id pcr testu od 1 po Int32.MaxValue
+                } while (_strPcrID.Contains(new KeyInt(pKodPcr)));
+            }
+            //create test and insert everywhere
+            var pcrTest = new PcrTest(pKodPracoviska, pKodPcr, pKodOkresu, pKodKraja, pRodCislo, 
+                _strOsobyPcrDatum.GetData(new KeyStr(pRodCislo)), pDatTestu, pVyslTestu, pPoznamka);
+            _strPcrDatum.Insert(new KeyDat(pDatTestu, pKodPcr), pcrTest);
+            //ref var pcrTestRef = ref _strPcrDatum.GetDataRef(new KeyDat(pDatTestu, kodPcr));
+            _strPcrID.Insert(new KeyInt(pKodPcr), pcrTest);
+            _strOsobyPcrDatum.GetData(new KeyStr(pRodCislo)).GetTree().Insert(new KeyDat(pDatTestu, pKodPcr), pcrTest);
+            if (_strKrajPcrDatum.Contains(new KeyInt(pKodKraja)))
+                _strKrajPcrDatum.GetData(new KeyInt(pKodKraja)).GetTree().Insert(new KeyDat(pDatTestu, pKodPcr), pcrTest);
+            else
+            {
+                _strKrajPcrDatum.Insert(new KeyInt(pKodKraja), new Miesto(pKodKraja));
+                _strKrajPcrDatum.GetData(new KeyInt(pKodKraja)).GetTree().Insert(new KeyDat(pDatTestu, pKodPcr), pcrTest);
+            }
+            if (_strOkresPcrDatum.Contains(new KeyInt(pKodOkresu))) 
+                _strOkresPcrDatum.GetData(new KeyInt(pKodOkresu)).GetTree().Insert(new KeyDat(pDatTestu, pKodPcr), pcrTest);
+            else
+            {
+                _strOkresPcrDatum.Insert(new KeyInt(pKodOkresu), new Miesto(pKodOkresu));
+                _strOkresPcrDatum.GetData(new KeyInt(pKodOkresu)).GetTree().Insert(new KeyDat(pDatTestu, pKodPcr), pcrTest);
+            }
+            if (_strPracoviskoPcrDatum.Contains(new KeyInt(pKodPracoviska))) 
+                _strPracoviskoPcrDatum.GetData(new KeyInt(pKodPracoviska)).GetTree().Insert(new KeyDat(pDatTestu, pKodPcr), pcrTest);
+            else
+            {
+                _strPracoviskoPcrDatum.Insert(new KeyInt(pKodPracoviska), new Miesto(pKodPracoviska));
+                _strPracoviskoPcrDatum.GetData(new KeyInt(pKodPracoviska)).GetTree().Insert(new KeyDat(pDatTestu, pKodPcr), pcrTest);
+            }
             return true;
         }
         public bool O02_VyhladajTest(int pCisloTestu, string pRodCislo, ref string textOut)
@@ -169,6 +217,126 @@ namespace Semka1
             }
             return true;
         }
+        public bool O10_VypisChorychOkres(int pOkresID, int pPocetDni, DateTime pDatum, ref string vypis)
+        {
+            var keyMiesto = new KeyInt(pOkresID);
+            if (_strOkresPcrDatum == null || _strOkresPcrDatum.GetData(keyMiesto) == null) return false;
+            var zoznam = _strOkresPcrDatum.GetData(keyMiesto).GetTree().InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
+            zoznam.Reverse();
+            var zozPozTestyOnce = new List<PcrTest>();
+            var zozRodCis = new List<string>();
+            foreach (var z in zoznam)
+            {
+                if (z.IsPositive() && !zozRodCis.Contains(z.GetRodCis()))
+                {
+                    zozRodCis.Add(z.GetRodCis());
+                    zozPozTestyOnce.Add(z);
+                }
+            }
+            vypis += "pocet: " + zozPozTestyOnce.Count + "\n";
+            foreach (var z in zozPozTestyOnce)
+            {
+                vypis += z.ToString();
+            }
+            return true;
+        }
+        public bool O11_VypisChorychKraj(int pKrajID, int pPocetDni, DateTime pDatum, ref string vypis)
+        {
+            var keyMiesto = new KeyInt(pKrajID);    
+            if (_strKrajPcrDatum == null || _strKrajPcrDatum.GetData(keyMiesto) == null) return false;
+            var zoznam = _strKrajPcrDatum.GetData(keyMiesto).GetTree().InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
+            zoznam.Reverse();
+            var zozPozTestyOnce = new List<PcrTest>();
+            var zozRodCis = new List<string>();
+            foreach (var z in zoznam)
+            {
+                if (z.IsPositive() && !zozRodCis.Contains(z.GetRodCis()))
+                {
+                    zozRodCis.Add(z.GetRodCis());
+                    zozPozTestyOnce.Add(z);
+                }
+            }
+            vypis += "pocet: " + zozPozTestyOnce.Count + "\n";
+            foreach (var z in zozPozTestyOnce)
+            {
+                vypis += z.ToString();
+            }
+            return true;
+        }
+        public bool O12_VypisVsetkychChorych(int pPocetDni, DateTime pDatum, ref string vypis)
+        {
+            if (_strPcrDatum == null) return false;
+            var zoznam = _strPcrDatum.InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
+            zoznam.Reverse();
+            var zozPozTestyOnce = new List<PcrTest>();
+            var zozRodCis = new List<string>();
+            foreach (var z in zoznam)
+            {
+                if (z.IsPositive() && !zozRodCis.Contains(z.GetRodCis()))
+                {
+                    zozRodCis.Add(z.GetRodCis());
+                    zozPozTestyOnce.Add(z);
+                }
+            }
+            vypis += "pocet: " + zozPozTestyOnce.Count + "\n";
+            foreach (var z in zozPozTestyOnce)
+            {
+                vypis += z.ToString();
+            }
+            return true;
+        }
+        public bool O13_VypisOkresovPodlaChorych(int pPocetDni, DateTime pDatum, ref string vypis)
+        {
+            //var OKRESCOUNT = 80;
+            if (_strPcrDatum == null) return false;
+            var zoznam = _strPcrDatum.InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
+            zoznam.Reverse();
+            var zozRodCis = new List<string>[OKRESCOUNT];
+            var zozPocNaOkres = new int[OKRESCOUNT];
+            var zoznamOkresov = new int[OKRESCOUNT];
+            for (int i = 1; i < OKRESCOUNT; i++) { zoznamOkresov[i] = i; zozRodCis[i] = new List<string>(); }
+            foreach (var z in zoznam)
+            {
+                var iOkr = z.GetOkres();
+                if (z.IsPositive() && !zozRodCis[iOkr].Contains(z.GetRodCis()))
+                {
+                    zozRodCis[iOkr].Add(z.GetRodCis());
+                    zozPocNaOkres[iOkr]++;
+                }
+            }
+            Array.Sort(zozPocNaOkres, zoznamOkresov);
+            for (int i = OKRESCOUNT-1; i>0;i--)
+            {
+                vypis += "okres: " + zoznamOkresov[i].ToString("00") + "   pocet: " + zozPocNaOkres[i] + "\n";
+            }
+            return true;
+        }
+        public bool O14_VypisKrajovPodlaChorych(int pPocetDni, DateTime pDatum, ref string vypis)
+        {
+            //var KRAJCOUNT = 9;
+            if (_strPcrDatum == null) return false;
+            var zoznam = _strPcrDatum.InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
+            zoznam.Reverse();
+            var zozRodCis = new List<string>[KRAJCOUNT];
+            var zozPocNaKraj = new int[KRAJCOUNT];
+            var zoznamKrajov = new int[KRAJCOUNT];
+            for (int i = 1; i < KRAJCOUNT; i++) { zoznamKrajov[i] = i; zozRodCis[i] = new List<string>(); }
+            foreach (var z in zoznam)
+            {
+                var iKraj = z.GetKraj();
+                if (z.IsPositive() && !zozRodCis[iKraj].Contains(z.GetRodCis()))
+                {
+                    zozRodCis[iKraj].Add(z.GetRodCis());
+                    zozPocNaKraj[iKraj]++;
+                }
+            }
+            Array.Sort(zozPocNaKraj, zoznamKrajov);
+            for (int i = KRAJCOUNT-1; i > 0; i--)
+            {
+                vypis += "kraj: " + zoznamKrajov[i].ToString("00") + "   pocet: " + zozPocNaKraj[i] + "\n";
+            }
+            return true;
+        }
         public bool O15_VypisVsetkychPracDatum(int numPracoviska, DateTime datOd, DateTime datDo, ref string vypis)
         {
             var pracKey = new KeyInt(numPracoviska);
@@ -266,11 +434,11 @@ namespace Semka1
                 var aktRodCis = new KeyStr(_rodCisList[rand.Next(_strOsobyPcrDatum.Count())]);
                 var aktDatum = new KeyDat(new DateTime(DateTime.Now.Ticks).AddDays(-rand.Next(600))
                     .AddHours(-rand.Next(24)).AddMinutes(-rand.Next(60)).AddSeconds(-rand.Next(60)), pcrID);
-                var prac = rand.Next(1, 151); // 1-150
+                var prac = rand.Next(1, PRACOVISKOCOUNT); // 1-150
                 var pracKey = new KeyInt(prac);
-                var okres = rand.Next(1, 80); // 1-79
+                var okres = rand.Next(1, OKRESCOUNT); // 1-79
                 var okresKey = new KeyInt(okres);
-                var kraj = rand.Next(1, 9); // 1-8
+                var kraj = rand.Next(1, KRAJCOUNT); // 1-8
                 var krajKey = new KeyInt(kraj);
                 //insert everywhere
                 var pcrTest = new PcrTest(prac, pcrID, okres, kraj,
@@ -312,6 +480,50 @@ namespace Semka1
             if (_strPcrID == null)
                 return _strOsobyPcrDatum.VypisVsetko();
             return _strOsobyPcrDatum.VypisVsetko() + _strPcrID.VypisVsetko();
+        }
+        public string ToString()
+        {
+            return "nah";
+        }
+        public bool SaveToFiles()
+        {
+            var filePathOsoba = "osoby.csv";
+            var csvOsoby = new StringBuilder();
+            var inorderOsoby = _strOsobyPcrDatum.InOrder();
+            foreach(var io in inorderOsoby) csvOsoby.AppendLine(io.ToStringCsv());
+            File.WriteAllText(filePathOsoba, csvOsoby.ToString());
+
+            var filePathPcrTest = "pcr_testy.csv";
+            var csvPcrTesty = new StringBuilder();
+            var inorderPcrTesty = _strPcrID.InOrder();
+            foreach (var io in inorderPcrTesty) csvPcrTesty.AppendLine(io.ToStringCsv());
+            File.WriteAllText(filePathPcrTest, csvPcrTesty.ToString());
+
+            return true;
+        }
+        public bool ReadFromFiles()
+        {
+            using (var reader = new StreamReader("osoby.csv"))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+                    O17_VlozOsobu(values[2], values[3], values[0], DateTime.Parse(values[1]));
+                }
+            }
+            using (var reader = new StreamReader("pcr_testy.csv"))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+                    O01_VlozPCR(Int32.Parse(values[0]), Int32.Parse(values[1]), Int32.Parse(values[2]), Int32.Parse(values[3]),
+                        values[7], DateTime.Parse(values[4]), Boolean.Parse(values[5]), values[6]);
+                }
+            }
+
+            return true;
         }
 
 
