@@ -1,7 +1,7 @@
 ﻿
 namespace Semka1GUI
 {
-    partial class osoba_vymaz_success
+    partial class MainWindow
     {
         /// <summary>
         ///  Required designer variable.
@@ -953,7 +953,7 @@ namespace Semka1GUI
     "_____________________________________________________________________________SUB" +
     "ORY____";
             // 
-            // osoba_vymaz_success
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1044,7 +1044,7 @@ namespace Semka1GUI
             this.Controls.Add(this.osoba_meno);
             this.Controls.Add(this.btn01);
             this.Controls.Add(this.btn17);
-            this.Name = "osoba_vymaz_success";
+            this.Name = "MainWindow";
             this.Text = "AUS2 Semestrálna práca 1 Serdel Tomas";
             ((System.ComponentModel.ISupportInitialize)(this.pcr_pracovisko)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pcr_okres)).EndInit();

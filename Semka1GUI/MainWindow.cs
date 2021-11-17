@@ -11,13 +11,18 @@ using Semka1;
 
 namespace Semka1GUI
 {
-    public partial class osoba_vymaz_success : Form
+    public partial class MainWindow : Form
     {
 
         private App _app = new App();
-        public osoba_vymaz_success()
+        public MainWindow()
         {
             InitializeComponent();
+            osoba_datum_narodenia.Value = DateTime.Now;
+            chori_datum.Value = DateTime.Now;
+            pcr_datum_testu.Value = DateTime.Now;
+            hladaj_dat_do.Value = DateTime.Now;
+            hladaj_dat_od.Value = DateTime.Now.AddDays(-5);
         }
 
         private void btn17_Click(object sender, EventArgs e)
@@ -177,17 +182,19 @@ namespace Semka1GUI
                 hladaj_success.Text = "vyplnte ziaden alebo prave jeden z udajov(kraj/okres/pracovisko)";
                 return;
             }
-            if (hladaj_dat_od.Value < hladaj_dat_od.Value)
+            var hladajDatOd = new DateTime(hladaj_dat_od.Value.Year, hladaj_dat_od.Value.Month, hladaj_dat_od.Value.Day);
+            var hladajDatDo = new DateTime(hladaj_dat_do.Value.Year, hladaj_dat_do.Value.Month, hladaj_dat_do.Value.Day + 1);
+            if (hladajDatOd < hladajDatDo)
             {
                 hladaj_success.Text = "datum do je mensi ako datum od";
                 return;
             }
-            if(hladaj_kraj.Value == 0 && hladaj_okres.Value == 0 && hladaj_prac.Value == 0)
+            if (hladaj_kraj.Value == 0 && hladaj_okres.Value == 0 && hladaj_prac.Value == 0)
             {
                 if (hladaj_iba_pozitivne.Checked)
                 {
                     string vypis = "";
-                    if (!_app.O08_VypisVsetkychPozitivnychTestovDatum(hladaj_dat_od.Value, hladaj_dat_do.Value, ref vypis))
+                    if (!_app.O08_VypisVsetkychPozitivnychTestovDatum(hladajDatOd, hladajDatDo, ref vypis))
                     {
                         hladaj_success.Text = "miesto ktore ste zadali nie je v databaze";
                         return;
@@ -201,7 +208,7 @@ namespace Semka1GUI
                 else
                 {
                     string vypis = "";
-                    if (!_app.O09_VypisVsetkychTestovDatum(hladaj_dat_od.Value, hladaj_dat_do.Value, ref vypis))
+                    if (!_app.O09_VypisVsetkychTestovDatum(hladajDatOd, hladajDatDo, ref vypis))
                     {
                         hladaj_success.Text = "miesto ktore ste zadali nie je v databaze";
                         return;
@@ -216,7 +223,7 @@ namespace Semka1GUI
             if (hladaj_okres.Value != 0 && hladaj_iba_pozitivne.Checked)
             {
                 string vypis = "";
-                if (!_app.O04_VypisPozitivnychOkresDatum((int)hladaj_okres.Value, hladaj_dat_od.Value, hladaj_dat_do.Value, ref vypis))
+                if (!_app.O04_VypisPozitivnychOkresDatum((int)hladaj_okres.Value, hladajDatOd, hladajDatDo, ref vypis))
                 {
                     hladaj_success.Text = "miesto ktore ste zadali nie je v databaze";
                     return;
@@ -230,7 +237,7 @@ namespace Semka1GUI
             if (hladaj_okres.Value != 0 && !hladaj_iba_pozitivne.Checked)
             {
                 string vypis = "";
-                if (!_app.O05_VypisVsetkychOkresDatum((int)hladaj_okres.Value, hladaj_dat_od.Value, hladaj_dat_do.Value, ref vypis))
+                if (!_app.O05_VypisVsetkychOkresDatum((int)hladaj_okres.Value, hladajDatOd, hladajDatDo, ref vypis))
                 {
                     hladaj_success.Text = "miesto ktore ste zadali nie je v databaze";
                     return;
@@ -244,7 +251,7 @@ namespace Semka1GUI
             if (hladaj_kraj.Value != 0 && hladaj_iba_pozitivne.Checked)
             {
                 string vypis = "";
-                if (!_app.O06_VypisPozitivnychKrajDatum((int)hladaj_kraj.Value, hladaj_dat_od.Value, hladaj_dat_do.Value, ref vypis))
+                if (!_app.O06_VypisPozitivnychKrajDatum((int)hladaj_kraj.Value, hladajDatOd, hladajDatDo, ref vypis))
                 {
                     hladaj_success.Text = "miesto ktore ste zadali nie je v databaze";
                     return;
@@ -258,7 +265,7 @@ namespace Semka1GUI
             if (hladaj_kraj.Value != 0 && !hladaj_iba_pozitivne.Checked)
             {
                 string vypis = "";
-                if (!_app.O07_VypisVsetkychKrajDatum((int)hladaj_kraj.Value, hladaj_dat_od.Value, hladaj_dat_do.Value, ref vypis))
+                if (!_app.O07_VypisVsetkychKrajDatum((int)hladaj_kraj.Value, hladajDatOd, hladajDatDo, ref vypis))
                 {
                     hladaj_success.Text = "miesto ktore ste zadali nie je v databaze";
                     return;
@@ -272,7 +279,7 @@ namespace Semka1GUI
             if (hladaj_prac.Value != 0 && !hladaj_iba_pozitivne.Checked)
             {
                 string vypis = "";
-                if (!_app.O15_VypisVsetkychPracDatum((int)hladaj_prac.Value, hladaj_dat_od.Value, hladaj_dat_do.Value, ref vypis))
+                if (!_app.O15_VypisVsetkychPracDatum((int)hladaj_prac.Value, hladajDatOd, hladajDatDo, ref vypis))
                 {
                     hladaj_success.Text = "miesto ktore ste zadali nie je v databaze";
                     return;
@@ -343,6 +350,7 @@ namespace Semka1GUI
 
         private void btn_chori_Click(object sender, EventArgs e)
         {
+            var datumDo = new DateTime(chori_datum.Value.Year, chori_datum.Value.Month, chori_datum.Value.Day);
             if (chori_kraj.Value != 0 && chori_okres.Value != 0 )
             {
                 chori_success.Text = "vyplnte ziaden alebo prave jeden z udajov(kraj/okres)";
@@ -351,7 +359,7 @@ namespace Semka1GUI
             if(chori_kraj.Value == 0 && chori_okres.Value == 0)
             {
                 string vypis = "";
-                if (!_app.O12_VypisVsetkychChorych((int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+                if (!_app.O12_VypisVsetkychChorych((int)(chori_pocet_dni.Value), datumDo, ref vypis))
                 {
                     chori_success.Text = "v systeme nie su ziadne testy";
                     return;
@@ -365,7 +373,7 @@ namespace Semka1GUI
             if (chori_kraj.Value != 0 && chori_okres.Value == 0)
             {
                 string vypis = "";
-                if (!_app.O11_VypisChorychKraj((int)(chori_kraj.Value), (int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+                if (!_app.O11_VypisChorychKraj((int)(chori_kraj.Value), (int)(chori_pocet_dni.Value), datumDo, ref vypis))
                 {
                     chori_success.Text = "kraj so zadanym ID nema ziadne zaznamy";
                     return;
@@ -379,7 +387,7 @@ namespace Semka1GUI
             if (chori_okres.Value != 0 && chori_kraj.Value == 0)
             {
                 string vypis = "";
-                if (!_app.O10_VypisChorychOkres((int)(chori_okres.Value), (int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+                if (!_app.O10_VypisChorychOkres((int)(chori_okres.Value), (int)(chori_pocet_dni.Value), datumDo, ref vypis))
                 {
                     chori_success.Text = "okres so zadanym ID nema ziadne zaznamy";
                     return;
@@ -394,8 +402,9 @@ namespace Semka1GUI
 
         private void btn_o14_chori_kraj_Click(object sender, EventArgs e)
         {
+            var datumDo = new DateTime(chori_datum.Value.Year, chori_datum.Value.Month, chori_datum.Value.Day);
             string vypis = "";
-            if (!_app.O14_VypisKrajovPodlaChorych((int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+            if (!_app.O14_VypisKrajovPodlaChorych((int)(chori_pocet_dni.Value), datumDo, ref vypis))
             {
                 chori_success.Text = "nastala chyba";
                 return;
@@ -409,8 +418,9 @@ namespace Semka1GUI
 
         private void btn_o13_chori_okres_Click(object sender, EventArgs e)
         {
+            var datumDo = new DateTime(chori_datum.Value.Year, chori_datum.Value.Month, chori_datum.Value.Day);
             string vypis = "";
-            if (!_app.O13_VypisOkresovPodlaChorych((int)(chori_pocet_dni.Value), chori_datum.Value, ref vypis))
+            if (!_app.O13_VypisOkresovPodlaChorych((int)(chori_pocet_dni.Value), datumDo, ref vypis))
             {
                 chori_success.Text = "nastala chyba";
                 return;

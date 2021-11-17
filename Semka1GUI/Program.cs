@@ -17,7 +17,7 @@ namespace Semka1GUI
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new osoba_vymaz_success());
+            Application.Run(new MainWindow());
         }
     }
 }
