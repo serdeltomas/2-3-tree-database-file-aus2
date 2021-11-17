@@ -481,6 +481,11 @@ namespace Semka1
                 return _strOsobyPcrDatum.VypisVsetko();
             return _strOsobyPcrDatum.VypisVsetko() + _strPcrID.VypisVsetko();
         }
+        public string Pocty()
+        {
+            return "osoby: " + _strOsobyPcrDatum.Count() + "   testy: " + _strPcrID.Count();
+        }
+
         public string ToString()
         {
             return "nah";

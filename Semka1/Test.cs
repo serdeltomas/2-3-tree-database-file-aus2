@@ -162,7 +162,7 @@ namespace Semka1
             
             
         }
-        public void TestDelete(int nOfInsertions,double deletionsFraction)
+        public void TestAll(int nOfInsertions,double deletionsFraction, double findsFraction)
         {
             var names = new string[]
             {
@@ -170,22 +170,22 @@ namespace Semka1
                 "Alexander" ,"Oliver" ,"Daniel" , "Lucas" ,"Matthew" ,"Aiden" , "Jackson" ,"Logan" ,"David" ,"Joseph" ,
                 "Samuel" ,"Henry" ,"Owen" ,"Sebastian" , "Gabriel" ,"Carter" ,"Jayden" ,"John" , "Luke" ,"Anthony"
             };
-            //var rand = new Random(2);
+            //var rand = new Random(20);
             var rand = new Random();
             var iAll = 0;
             var iDel = 0;
             var iIns = 0;
+            var iFind = 0;
             var stromOsoby = new T23Tree<KeyStr,Osoba>();
             var keysTest = new ArrayList(nOfInsertions);
             var keysTree = new ArrayList(nOfInsertions);
-            Console.Write("INSERT:DELETE(" + nOfInsertions + ":" + (int)(nOfInsertions*deletionsFraction) + ")....");
+            Console.Write("INSERT:DELETE:FIND(" + nOfInsertions + ":" + (int)(nOfInsertions*deletionsFraction) + ":" + (int)(nOfInsertions * findsFraction) + ")");
             for (int i = 1; i <= nOfInsertions; i++)
             {
+                var countNow = keysTest.Count;
                 var nd = rand.NextDouble();
-                if (nd < deletionsFraction)
+                if (nd < deletionsFraction && countNow != 0)
                 {
-                    var countNow = keysTest.Count;
-                    if(countNow==0) continue;
                     var delWhat = rand.Next(countNow);
                     var nKey = new KeyStr(keysTest[delWhat].ToString());
                     stromOsoby.Delete(nKey);
@@ -195,7 +195,7 @@ namespace Semka1
                         Console.WriteLine(stromOsoby.CountEntries() == keysTest.Count ? "PASS" : "FAIL");
                         Console.Write("Sequence Test.....");
                         keysTree.Clear();
-                        stromOsoby.InOrder(stromOsoby.GetRoot(), ref keysTree);
+                        stromOsoby.InOrderRecursion(stromOsoby.GetRoot(), ref keysTree);
                         var foundMistake = false;
                         keysTest.Sort();
                         var count = keysTest.Count;
@@ -209,39 +209,68 @@ namespace Semka1
                     }*/
                     iDel++;
                 }
-                /*else
-                {*/
-                    string cislotry;
-                    do
-                    {
-                        cislotry = rand.Next(Int32.MaxValue).ToString("0000000000");
-                    } while (keysTest.Contains(cislotry));
-
-                    KeyStr actKey = new KeyStr(cislotry);
-                    keysTest.Add(cislotry);
-                    stromOsoby.Insert(actKey, new Osoba(names[rand.Next(names.Length)],
-                        "Mrkva", cislotry, 1991, 01, 01));
+                countNow = keysTest.Count;
+                var nf = rand.NextDouble();
+                if (nf < findsFraction && countNow != 0)
+                {
+                    var findWhat = rand.Next(countNow);
+                    var nKey = new KeyStr(keysTest[findWhat].ToString());
+                    stromOsoby.GetData(nKey);
                     /*{//tests
-                        Console.Write("justInserted "+ cislotry +"\nLength Test.....T" +stromOsoby.Count() + "-R" + stromOsoby.CountEntries() +"-A"+ keysTest.Count + "..");
+                        Console.Write("justFound "+ nKey +"\nLength Test.....T" + stromOsoby.Count() + "-R" + stromOsoby.CountEntries() + "-A"+ keysTest.Count + "..");
                         Console.WriteLine(stromOsoby.CountEntries() == keysTest.Count ? "PASS" : "FAIL");
                         Console.Write("Sequence Test.....");
                         keysTree.Clear();
-                        stromOsoby.InOrder(stromOsoby.GetRoot(), ref keysTree);
+                        stromOsoby.InOrderRecursion(stromOsoby.GetRoot(), ref keysTree);
                         var foundMistake = false;
                         keysTest.Sort();
                         var count = keysTest.Count;
-                        for (int k = 0; k < count; k++)
+                        for (int j= 0; j < count; j++)
                         {
-                            if(!keysTest[k].Equals(keysTree[k].ToString())) {foundMistake = true; break; }
+                            if(!keysTest[j].Equals(keysTree[j].ToString())) {foundMistake = true; break; }
                         }
                         Console.WriteLine(foundMistake ? "FAIL" : "PASS");
                         Console.Write("List Depth Test.....");
                         Console.WriteLine(stromOsoby.IsAllLeavesSameDepth()? "PASS" : "FAIL");
                     }*/
-                    iIns++;
+                    iFind++;
+                }
+                /*else
+                {*/
+                string cislotry;
+                do
+                {
+                    cislotry = rand.Next(Int32.MaxValue).ToString("0000000000");
+                } while (keysTest.Contains(cislotry));
+
+                KeyStr actKey = new KeyStr(cislotry);
+                keysTest.Add(cislotry);
+                stromOsoby.Insert(actKey, new Osoba(names[rand.Next(names.Length)],
+                    "Mrkva", cislotry, 1991, 01, 01));
+                /*{//tests
+                    Console.Write("justInserted "+ cislotry +"\nLength Test.....T" +stromOsoby.Count() + "-R" + stromOsoby.CountEntries() +"-A"+ keysTest.Count + "..");
+                    Console.WriteLine(stromOsoby.CountEntries() == keysTest.Count ? "PASS" : "FAIL");
+                    Console.Write("Sequence Test.....");
+                    keysTree.Clear();
+                    stromOsoby.InOrderRecursion(stromOsoby.GetRoot(), ref keysTree);
+                    var foundMistake = false;
+                    keysTest.Sort();
+                    var count = keysTest.Count;
+                    for (int k = 0; k < count; k++)
+                    {
+                        if(!keysTest[k].Equals(keysTree[k].ToString())) {foundMistake = true; break; }
+                    }
+                    Console.WriteLine(foundMistake ? "FAIL" : "PASS");
+                    Console.Write("List Depth Test.....");
+                    Console.WriteLine(stromOsoby.IsAllLeavesSameDepth()? "PASS" : "FAIL");
+                }*/
+                iIns++;
                 //}
 
                 iAll++;
+                if (i % 100000 == 0) System.Console.Write("|");
+                else if (i % 10000 == 0) System.Console.Write(",");
+                else if (i % 1000 == 0) System.Console.Write(".");
             }
 
             System.Console.WriteLine("DONE " + iAll);
@@ -257,12 +286,12 @@ namespace Semka1
             var countt = keysTest.Count;
             for (int i = 0; i < countt; i++)
             {
-                if(!keysTest[i].Equals(keysTreeNotRecursive[i].ToString())) {foundMistak = true; break; }
+                if(!keysTest[i].Equals(keysTreeNotRecursive[i].GetRodCislo())) {foundMistak = true; break; }
             }
             Console.WriteLine(foundMistak ? "FAIL" : "PASS");
             Console.Write("List Depth Test.....");
             Console.WriteLine(stromOsoby.IsAllLeavesSameDepth()? "PASS" : "FAIL");
-            Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel);
+            Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
         }
         public void TestDeleteBasic()
         {

@@ -36,7 +36,12 @@ namespace Semka1GUI
             try
             {
                 if (_app.O17_VlozOsobu(osoba_meno.Text, osoba_priezvisko.Text,
-                    osoba_rod_cislo.Text, osoba_datum_narodenia.Value)) osoba_success.Text = "uspesne vlozena";
+                    osoba_rod_cislo.Text, osoba_datum_narodenia.Value))
+                {
+                    osoba_success.Text = "uspesne vlozena";
+                    count_all.Text = _app.Pocty();
+                    return;
+                }
                 else osoba_success.Text = "nepodarilo sa";
             }
             catch(DuplicateWaitObjectException)
@@ -63,8 +68,13 @@ namespace Semka1GUI
             }
             try
             {
-                if (_app.O01_VlozPCR((int)pcr_pracovisko.Value, (int)pcr_okres.Value, (int)pcr_kraj.Value, pcr_rod_cislo.Text, pcr_datum_testu.Value, pcr_positive.Checked,
-                    pcr_poznamka.Text)) pcr_success.Text = "uspesne vlozene";
+                if (_app.O01_VlozPCR((int)pcr_pracovisko.Value, (int)pcr_okres.Value, (int)pcr_kraj.Value,
+                    pcr_rod_cislo.Text, pcr_datum_testu.Value, pcr_positive.Checked, pcr_poznamka.Text))
+                {
+                    pcr_success.Text = "uspesne vlozene";
+                    count_all.Text = _app.Pocty();
+                    return;
+                }
                 else pcr_success.Text = "osoba nie je v systeme";
             }
             catch (NullReferenceException)
@@ -78,6 +88,8 @@ namespace Semka1GUI
             gen_success.Text = "generujem ....";
             if (!_app.GenerateData((int)gen_osoby.Value, (int)gen_testy.Value)) { gen_success.Text = "ziadne osoby v databaze"; return; }
             gen_success.Text = "uspesne vygenerovane " + gen_osoby.Value + " osob a " + gen_testy.Value + " testov";
+            count_all.Text = _app.Pocty();
+            return;
         }
 
         private void btn02_Click(object sender, EventArgs e)
@@ -119,10 +131,10 @@ namespace Semka1GUI
 
         private void btn_dummy_Click(object sender, EventArgs e)
         {
-            //_app.ReadFromFiles();
-            var f = new WindowOut("DONE");
-            f.Text = "Files saved";
-            f.Show();
+            //_app.GenerateData(1000000, 1000000);
+            //var f = new WindowOut("DONE");
+            //f.Text = "Files saved";
+            //f.Show();
         }
 
         private void btn_vypis_vsetko_Click(object sender, EventArgs e)
@@ -295,6 +307,7 @@ namespace Semka1GUI
                 return;
             }
             vymaz_success.Text = "zadane rodne cislo a vsetky jeho testy boli odstranene z databazy";
+            count_all.Text = _app.Pocty();
             return;
         }
 
@@ -311,6 +324,7 @@ namespace Semka1GUI
                 return;
             }
             vymaz_success.Text = "zadane cislo testu bolo odstranene z databazy";
+            count_all.Text = _app.Pocty();
             return;
         }
 
@@ -324,6 +338,7 @@ namespace Semka1GUI
         {
             _app.ReadFromFiles();
             file_success.Text = "uspesne nacitane zo suboru";
+            count_all.Text = _app.Pocty();
         }
 
         private void btn_chori_Click(object sender, EventArgs e)
