@@ -49,12 +49,6 @@ namespace Semka1
             if (ReferenceEquals(null, other)) return 1;
             return _keyVal.CompareTo(other._keyVal);
         }
-        public int Compare(KeyInt? other)
-        {
-            if (ReferenceEquals(this, other)) return 0;
-            if (ReferenceEquals(null, other)) return 1;
-            return _keyVal.CompareTo(other._keyVal);
-        }
 
         public override string ToString()
         {

@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Semka1.App">
+    <Position X="0.5" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IhAICACIIFBgIAAkAAYAAFAwgESAQAAAAwABAAAAAI0=</HashCode>
+      <FileName>App.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Semka1.KeyStr" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="12.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAQAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Keys.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Semka1.KeyInt" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAQAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Keys.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Semka1.KeyDat" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="11" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAQEAAAAAAQAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Keys.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Semka1.Miesto" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="9.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAQAIAAAAAAgAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Miesto.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Semka1.T23Node&lt;TKey, T&gt;">
+    <Position X="7.5" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAICAEAAQlAAEiBJEHJAxAAEogBEAAEIEAIQABAg=</HashCode>
+      <FileName>Node.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Semka1.Osoba" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="9" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAYAEAAEAAAAAIIgAAAAAAAAIAAAADAAAAA=</HashCode>
+      <FileName>Osoba.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Semka1.PcrTest" BaseTypeListCollapsed="true">
+    <Position X="3.5" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AIggIAAAAAABAAAEAAQAAAwQIAAIYAAAIAAAACAAAEA=</HashCode>
+      <FileName>PcrTest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Semka1.Test">
+    <Position X="1.25" Y="12.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAgAAAIAAAAACAAAA=</HashCode>
+      <FileName>Test.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Semka1.T23Tree&lt;TKey, T&gt;">
+    <Position X="4.25" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AICACUACGQARAAAEAJAAAEQAAgEIAEAgCAGgAoAQCAg=</HashCode>
+      <FileName>Tree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Semka1.ICsv">
+    <Position X="5.75" Y="13.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>ICsv.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

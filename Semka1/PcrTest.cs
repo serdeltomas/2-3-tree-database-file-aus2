@@ -62,7 +62,7 @@ namespace Semka1
         public int GetPrac() { return _kodPracoviska; }
         public DateTime GetDat() { return _datTestu; }
         public string GetRodCis() { return _rodCislo; }
-
+        public Osoba GetOsoba() { return _osoba; }
         public string ToStringCsv()
         {
             return _kodPcr + ";" + _kodKraja + ";" + _kodOkresu + ";" + _kodPracoviska + ";" 

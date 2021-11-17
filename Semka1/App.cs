@@ -100,7 +100,7 @@ namespace Semka1
         public bool O02_VyhladajTest(int pCisloTestu, string pRodCislo, ref string textOut)
         {
             var testNaVypis = _strPcrID.GetData(new KeyInt(pCisloTestu));
-            var osobaNaVypis = _strOsobyPcrDatum.GetData(new KeyStr(pRodCislo));
+            var osobaNaVypis = testNaVypis.GetOsoba();
             if (testNaVypis == null || osobaNaVypis == null) return false;
             textOut = testNaVypis.ToString() + " " + osobaNaVypis.ToString();
             return true;
@@ -127,16 +127,17 @@ namespace Semka1
             var datOdKey = new KeyDat(datOd, 1);
             var datDoKey = new KeyDat(datDo, Int32.MaxValue);
             var zoznam = _strOkresPcrDatum.GetData(okr).GetTree().InOrder(datOdKey, datDoKey);
-            var zozPoz = new List<PcrTest>();
+            var vypisLocal = "";
+            var count = 0;
             foreach (var z in zoznam)
             {
-                if (z.IsPositive()) zozPoz.Add(z);
+                if (z.IsPositive())
+                {
+                    vypisLocal += z.ToString();
+                    count++;
+                }
             }
-            vypis += "pocet: " + zozPoz.Count + "\n";
-            foreach (var z in zozPoz)
-            {
-                vypis += z.ToString();
-            }
+            vypis += "pocet: " + count + "\n" + vypisLocal;
             return true;
         }
         public bool O05_VypisVsetkychOkresDatum(int numOkresu, DateTime datOd, DateTime datDo, ref string vypis)
@@ -160,16 +161,17 @@ namespace Semka1
             var datOdKey = new KeyDat(datOd, 1);
             var datDoKey = new KeyDat(datDo, Int32.MaxValue);
             var zoznam = _strKrajPcrDatum.GetData(kraj).GetTree().InOrder(datOdKey, datDoKey);
-            var zozPoz = new List<PcrTest>();
+            var vypisLocal = "";
+            var count = 0;
             foreach (var z in zoznam)
             {
-                if (z.IsPositive()) zozPoz.Add(z);
+                if (z.IsPositive())
+                {
+                    vypisLocal += z.ToString();
+                    count++;
+                }
             }
-            vypis += "pocet: " + zozPoz.Count + "\n";
-            foreach (var z in zozPoz)
-            {
-                vypis += z.ToString();
-            }
+            vypis += "pocet: " + count + "\n" + vypisLocal;
             return true;
         }
         public bool O07_VypisVsetkychKrajDatum(int numKraja, DateTime datOd, DateTime datDo, ref string vypis)
@@ -192,16 +194,17 @@ namespace Semka1
             var datOdKey = new KeyDat(datOd, 1);
             var datDoKey = new KeyDat(datDo, Int32.MaxValue);
             var zoznam = _strPcrDatum.InOrder(datOdKey, datDoKey);
-            var zozPoz = new List<PcrTest>();
+            var vypisLocal = "";
+            var count = 0;
             foreach (var z in zoznam)
             {
-                if (z.IsPositive()) zozPoz.Add(z);
+                if (z.IsPositive())
+                {
+                    vypisLocal += z.ToString();
+                    count++;
+                }
             }
-            vypis += "pocet: " + zozPoz.Count + "\n";
-            foreach (var z in zozPoz)
-            {
-                vypis += z.ToString();
-            }
+            vypis += "pocet: " + count + "\n" + vypisLocal;
             return true;
         }
         public bool O09_VypisVsetkychTestovDatum(DateTime datOd, DateTime datDo, ref string vypis)
@@ -222,22 +225,20 @@ namespace Semka1
             var keyMiesto = new KeyInt(pOkresID);
             if (_strOkresPcrDatum == null || _strOkresPcrDatum.GetData(keyMiesto) == null) return false;
             var zoznam = _strOkresPcrDatum.GetData(keyMiesto).GetTree().InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
-            zoznam.Reverse();
-            var zozPozTestyOnce = new List<PcrTest>();
+            //zoznam.Reverse();
             var zozRodCis = new List<string>();
+            var vypisLocal = "";
+            var count = 0;
             foreach (var z in zoznam)
             {
                 if (z.IsPositive() && !zozRodCis.Contains(z.GetRodCis()))
                 {
                     zozRodCis.Add(z.GetRodCis());
-                    zozPozTestyOnce.Add(z);
+                    vypisLocal += z.ToString();
+                    count++;
                 }
             }
-            vypis += "pocet: " + zozPozTestyOnce.Count + "\n";
-            foreach (var z in zozPozTestyOnce)
-            {
-                vypis += z.ToString();
-            }
+            vypis += "pocet: " + count + "\n" + vypisLocal;
             return true;
         }
         public bool O11_VypisChorychKraj(int pKrajID, int pPocetDni, DateTime pDatum, ref string vypis)
@@ -245,44 +246,40 @@ namespace Semka1
             var keyMiesto = new KeyInt(pKrajID);    
             if (_strKrajPcrDatum == null || _strKrajPcrDatum.GetData(keyMiesto) == null) return false;
             var zoznam = _strKrajPcrDatum.GetData(keyMiesto).GetTree().InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
-            zoznam.Reverse();
-            var zozPozTestyOnce = new List<PcrTest>();
+            //zoznam.Reverse();
             var zozRodCis = new List<string>();
+            var vypisLocal = "";
+            var count = 0;
             foreach (var z in zoznam)
             {
                 if (z.IsPositive() && !zozRodCis.Contains(z.GetRodCis()))
                 {
                     zozRodCis.Add(z.GetRodCis());
-                    zozPozTestyOnce.Add(z);
+                    vypisLocal += z.ToString();
+                    count++;
                 }
             }
-            vypis += "pocet: " + zozPozTestyOnce.Count + "\n";
-            foreach (var z in zozPozTestyOnce)
-            {
-                vypis += z.ToString();
-            }
+            vypis += "pocet: " + count + "\n" + vypisLocal;
             return true;
         }
         public bool O12_VypisVsetkychChorych(int pPocetDni, DateTime pDatum, ref string vypis)
         {
             if (_strPcrDatum == null) return false;
             var zoznam = _strPcrDatum.InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
-            zoznam.Reverse();
-            var zozPozTestyOnce = new List<PcrTest>();
+            //zoznam.Reverse();
             var zozRodCis = new List<string>();
+            var vypisLocal = "";
+            var count = 0;
             foreach (var z in zoznam)
             {
                 if (z.IsPositive() && !zozRodCis.Contains(z.GetRodCis()))
                 {
                     zozRodCis.Add(z.GetRodCis());
-                    zozPozTestyOnce.Add(z);
+                    vypisLocal += z.ToString();
+                    count++;
                 }
             }
-            vypis += "pocet: " + zozPozTestyOnce.Count + "\n";
-            foreach (var z in zozPozTestyOnce)
-            {
-                vypis += z.ToString();
-            }
+            vypis += "pocet: " + count + "\n" + vypisLocal;
             return true;
         }
         public bool O13_VypisOkresovPodlaChorych(int pPocetDni, DateTime pDatum, ref string vypis)
@@ -290,7 +287,7 @@ namespace Semka1
             //var OKRESCOUNT = 80;
             if (_strPcrDatum == null) return false;
             var zoznam = _strPcrDatum.InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
-            zoznam.Reverse();
+            //zoznam.Reverse();
             var zozRodCis = new List<string>[OKRESCOUNT];
             var zozPocNaOkres = new int[OKRESCOUNT];
             var zoznamOkresov = new int[OKRESCOUNT];
@@ -316,7 +313,7 @@ namespace Semka1
             //var KRAJCOUNT = 9;
             if (_strPcrDatum == null) return false;
             var zoznam = _strPcrDatum.InOrder(new KeyDat(pDatum.AddDays(-pPocetDni), 0), new KeyDat(pDatum, Int32.MaxValue));
-            zoznam.Reverse();
+            //zoznam.Reverse();
             var zozRodCis = new List<string>[KRAJCOUNT];
             var zozPocNaKraj = new int[KRAJCOUNT];
             var zoznamKrajov = new int[KRAJCOUNT];
