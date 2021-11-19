@@ -350,7 +350,7 @@ namespace Semka1GUI
             // 
             this.gen_testy.Location = new System.Drawing.Point(118, 49);
             this.gen_testy.Maximum = new decimal(new int[] {
-            500000,
+            1000000,
             0,
             0,
             0});
@@ -371,7 +371,7 @@ namespace Semka1GUI
             // 
             this.gen_osoby.Location = new System.Drawing.Point(12, 49);
             this.gen_osoby.Maximum = new decimal(new int[] {
-            500000,
+            1000000,
             0,
             0,
             0});
