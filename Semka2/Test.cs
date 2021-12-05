@@ -354,14 +354,14 @@ namespace Semka2
 
             var dataTest = new ArrayList(nOfInsertions);
             var keysFile = new ArrayList(nOfInsertions);
-            var suborHandler = new FIleHandler("_test",new DummyClass().Size());
+            var suborHandler = new FIleHandler<DummyClass>("_test",new DummyClass().Size());
 
             System.Console.Write("INSERTING " + nOfInsertions.ToString() + " items");
             for (int i = 1; i <= nOfInsertions; i++)
             {
-                var dummy = new DummyClass(firstNames[rand.Next(firstNames.Length)], lastNames[rand.Next(lastNames.Length)], rand.Next());
+                var dummy = new DummyClass(firstNames[rand.Next(firstNames.Length)], rand.NextDouble(), rand.Next());
                 dataTest.Add(dummy.ToString());
-                keysFile.Add(suborHandler.InsertToFile(dummy.ToByteArray()));
+                keysFile.Add(suborHandler.InsertToFile(dummy));
 
                 if (i % 100000 == 0) System.Console.Write("|");
                 else if (i % 10000 == 0) System.Console.Write(",");
@@ -376,9 +376,9 @@ namespace Semka2
             var dum = new DummyClass();
             for (int i = 0; i < nOfInsertions; i++)
             {
-                if (suborHandler.ReadFromFile((long)keysFile[i]) == null) continue;
-                if (dum.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString().CompareTo((string)dataTest[i]) != 0)
-                    { foundMistake = true; Console.WriteLine("\n" + i + "\n" + dum.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString() + "\n" + dataTest[i].ToString());
+                if (suborHandler.ReadFromFile((long)keysFile[i],dum) == default) continue;
+                if (suborHandler.ReadFromFile((long)keysFile[i],dum).ToString().CompareTo((string)dataTest[i]) != 0)
+                    { foundMistake = true; Console.WriteLine("\n" + i + "\n" + suborHandler.ReadFromFile((long)keysFile[i],dum).ToString() + "\n" + dataTest[i].ToString());
                     break; }
             }
             Console.WriteLine(foundMistake ? "FAIL" : "PASS");
@@ -403,7 +403,7 @@ namespace Semka2
             var iFind = 0;
             var dataTest = new ArrayList(nOfInsertions);
             var keysFile = new ArrayList(nOfInsertions);
-            var suborHandler = new FIleHandler("_test", new DummyClass().Size());
+            var suborHandler = new FIleHandler<DummyClass>("_test", new DummyClass().Size());
 
             Console.Write("INSERT:DELETE:FIND(" + nOfInsertions + ":" + (int)(nOfInsertions * deletionsFraction) + ":" + (int)(nOfInsertions * findsFraction) + ")");
             for (int j = 1; j <= nOfInsertions; j++)
@@ -445,7 +445,7 @@ namespace Semka2
                 if (nf < findsFraction && countNow != 0)
                 {
                     var findWhat = rand.Next(countNow);
-                    suborHandler.ReadFromFile((long)keysFile[findWhat]);
+                    suborHandler.ReadFromFile((long)keysFile[findWhat],new DummyClass());
                     iFind++;
 
                     /*//tests 
@@ -468,9 +468,9 @@ namespace Semka2
                     Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
                     */
                 }
-                var dummy = new DummyClass(firstNames[rand.Next(firstNames.Length)], lastNames[rand.Next(lastNames.Length)], rand.Next());
+                var dummy = new DummyClass(firstNames[rand.Next(firstNames.Length)], rand.NextDouble(), rand.Next());
                 dataTest.Add(dummy.ToString());
-                keysFile.Add(suborHandler.InsertToFile(dummy.ToByteArray()));
+                keysFile.Add(suborHandler.InsertToFile(dummy));
 
                 if (j % 100000 == 0) System.Console.Write("|");
                 else if (j % 10000 == 0) System.Console.Write(",");
@@ -488,10 +488,13 @@ namespace Semka2
             var dum = new DummyClass();
             for (int j = 0; j < dataTest.Count; j++)
             {
-                if (suborHandler.ReadFromFile((long)keysFile[j]) == null) continue;
-                if (!dataTest.Contains(dum.FromByteArray(suborHandler.ReadFromFile((long)keysFile[j])).ToString()))
+                if (suborHandler.ReadFromFile((long)keysFile[j],dum) == default) continue;
+                if (!dataTest.Contains(suborHandler.ReadFromFile((long)keysFile[j],dum).ToString()))
                 {
-                    foundMistake = true; Console.WriteLine("\n" + j + "\n" + dum.FromByteArray(suborHandler.ReadFromFile((long)keysFile[j])).ToString() + "\n" + dataTest[j].ToString());
+                    foundMistake = true; 
+                    Console.WriteLine("\n" + j + "\n" 
+                        + suborHandler.ReadFromFile((long)keysFile[j],dum).ToString() + "\n" 
+                        + dataTest[j].ToString());
                     break;
                 }
                 if (j % 100000 == 0) System.Console.Write("|");

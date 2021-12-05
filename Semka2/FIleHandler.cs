@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Semka2
 {
-	class FIleHandler
+	class FIleHandler<T> where T : IDataToFIle<T>
 	{
 		private FileStream _fileData;
 		private int _lengthOfRecord;
@@ -22,7 +22,7 @@ namespace Semka2
 			_count = 0;
 			try
 			{
-				_fileData = new FileStream(pFileName + ".asc", FileMode.Create);
+				_fileData = new FileStream(pFileName + ".bin", FileMode.Create);
 				_fileTemp = new FileStream(pFileName + ".txt", FileMode.Create);
 			}
 			catch
@@ -50,7 +50,7 @@ namespace Semka2
 			_fileData.Close();
 			_fileTemp.Close();
 		}
-		public long InsertToFile(byte[] pByteArray)
+		public long InsertToFile(T pData)
 		{
 			//byte[] bA = Encoding.ASCII.GetBytes(sToWrite);
 			long where;
@@ -59,16 +59,16 @@ namespace Semka2
 				where = _freeSpace.First();
 				_freeSpace.RemoveFirst(); }
 			_fileData.Seek(where * _lengthOfRecord, SeekOrigin.Begin);
-			var nPos = (long)(_fileData.Position/_lengthOfRecord);
-			foreach (byte bt in pByteArray) _fileData.WriteByte(bt);
+			var nPos = _fileData.Position/_lengthOfRecord;
+			foreach (byte bt in pData.ToByteArray()) _fileData.WriteByte(bt);
 			_fileData.Flush(); 
 			_count++;
 			return nPos;
 		}
 
-		public byte[] ReadFromFile(long pWhere)
+		public T ReadFromFile(long pWhere, T pData)
 		{
-			if (_freeSpace.Contains(pWhere) || _fileData.Seek(pWhere * _lengthOfRecord, SeekOrigin.Begin) > _fileData.Seek(-_lengthOfRecord, SeekOrigin.End)) return null;
+			if (_freeSpace.Contains(pWhere) || _fileData.Seek(pWhere * _lengthOfRecord, SeekOrigin.Begin) > _fileData.Seek(-_lengthOfRecord, SeekOrigin.End)) return default;
 			_fileData.Seek(pWhere * _lengthOfRecord, SeekOrigin.Begin);
 			int b;
 			var count = 0;
@@ -78,7 +78,7 @@ namespace Semka2
 				byteArr[count] = (byte)b;
 				count++;
 			}
-			return byteArr;
+			return pData.FromByteArray(byteArr);
 		}
 		public bool DeleteFromFile(long pWhere)
 		{
