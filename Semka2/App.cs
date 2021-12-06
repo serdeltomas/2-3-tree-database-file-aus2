@@ -16,9 +16,9 @@ namespace Semka2
         private T23Tree<KeyInt, Miesto> _strPracoviskoPcrDatum = new T23Tree<KeyInt, Miesto>();
         //private List<KeyInt> _pcrIdList = new List<KeyInt>();
         private List<string> _rodCisList = new List<string>();
-        private int KRAJCOUNT = 9; // 1-8
-        private int OKRESCOUNT = 80;// 1-79
-        private int PRACOVISKOCOUNT = 151; // 1-150
+        private const int KRAJCOUNT = 9; // 1-8
+        private const int OKRESCOUNT = 80;// 1-79
+        private const int PRACOVISKOCOUNT = 151; // 1-150
         public App()
         {
         }

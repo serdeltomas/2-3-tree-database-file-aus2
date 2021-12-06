@@ -13,7 +13,7 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace Semka2
 {
-    public class T23Tree<TKey, T> where TKey : IComparable<TKey> where T : ICsv
+    public class T23Tree<TKey, T> where TKey : IComparable<TKey>, IDataToFIle<TKey> where T : ICsv, IDataToFIle<T> //where T23Node<TKey, T> :IDataToFIle<T23Node<TKey, T>>
     {
         private T23Node<TKey, T> _root;
         //private int _depth;//not counting atm
@@ -27,7 +27,7 @@ namespace Semka2
                 if (keyToFind.CompareTo(searchNow.GetLeftKey()) == 0 
                     || keyToFind.CompareTo(searchNow.GetRightKey()) == 0)
                     throw new DuplicateWaitObjectException("duplicate key error in: tree: FindNodeToInsert");
-                searchNow = ref searchNow.NextNode(keyToFind);
+                searchNow = searchNow.NextNode(keyToFind);
             }
             return ref searchNow;
         }
@@ -36,14 +36,14 @@ namespace Semka2
             {
                 _root = new T23Node<TKey, T>(nKey,nData); 
                 _count++; if(_root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
-            ref var node = ref FindNodeToInsert(nKey);
-            if (InsertLeaf(ref node,nKey,ref nData)) { 
+            var node =  FindNodeToInsert(nKey);
+            if (InsertLeaf(node,nKey,nData)) { 
                 _count++; if(_root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
             while(node.GetParent() != null)
             {
-                ref var nodeKid = ref node;
-                node = ref node.GetParent(); //caution with ref
-                if(InsertInternal(ref node, ref nodeKid) || node == null) { 
+                var nodeKid = node;
+                node = node.GetParent(); //caution with ref
+                if(InsertInternal(node, nodeKid) || node == null) { 
                     _count++; if(_root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
             }
             _root = node; _count++; if(_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
@@ -56,96 +56,96 @@ namespace Semka2
                 _count++; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
             }
             ref var node = ref FindNodeToInsert(nKey);
-            if (InsertLeaf(ref node, nKey, ref nData))
+            if (InsertLeaf(node, nKey, nData))
             {
                 _count++; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
             }
             while (node.GetParent() != null)
             {
                 ref var nodeKid = ref node;
-                node = ref node.GetParent(); //caution with ref
-                if (InsertInternal(ref node, ref nodeKid) || node == null)
+                node = node.GetParent(); //caution with ref
+                if (InsertInternal( node, nodeKid) || node == null)
                 {
                     _count++; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
                 }
             }
             _root = node; _count++; if (_root.GetParent() != null) SetRoot(_root.GetParent()); return true;
         }
-        private bool InsertLeaf(ref T23Node<TKey, T> node,TKey nKey, ref T nData) {
+        private bool InsertLeaf(T23Node<TKey, T> node,TKey nKey, T nData) {
             if (node.IsLeaf() && !node.Is3Node()) { // insert into this node easy; return true;
                 if (node.GetLeftKey().CompareTo(nKey) < 0) { node.SetRight(nKey,nData);return true;} // lkey < nkey
                 node.SetRight(node.GetLeftKey(),node.GetLeftData()); node.SetLeft(nKey, nData); return true; // nkey < lkey
             }
             if (node.IsLeaf() && node.Is3Node()) { //split into a tree; return false;
                 if (node.GetLeftKey().CompareTo(nKey) > 0) { // nkey < lkey
-                    node.SetLeftChild(new T23Node<TKey, T>(nKey,nData, ref node));
-                    node.SetRightChild(new T23Node<TKey, T>(node.GetRightKey(),node.GetRightData(),ref node));
+                    node.SetLeftChild(new T23Node<TKey, T>(nKey,nData, node));
+                    node.SetRightChild(new T23Node<TKey, T>(node.GetRightKey(),node.GetRightData(),node));
                     node.ClearRight(); return false; 
                 }
                 if (node.GetRightKey().CompareTo(nKey) < 0) { // rkey < nkey
-                    node.SetRightChild(new T23Node<TKey, T>(nKey,nData,ref node));
-                    node.SetLeftChild(new T23Node<TKey, T>(node.GetLeftKey(),node.GetLeftData(),ref node));
+                    node.SetRightChild(new T23Node<TKey, T>(nKey,nData,node));
+                    node.SetLeftChild(new T23Node<TKey, T>(node.GetLeftKey(),node.GetLeftData(),node));
                     node.SetLeft(node.GetRightKey(), node.GetRightData());
                     node.ClearRight(); return false; 
                 }
                 //lkey < nkey < rkey
-                node.SetRightChild(new T23Node<TKey, T>(node.GetRightKey(),node.GetRightData(),ref node));
-                node.SetLeftChild(new T23Node<TKey, T>(node.GetLeftKey(),node.GetLeftData(),ref node));
+                node.SetRightChild(new T23Node<TKey, T>(node.GetRightKey(),node.GetRightData(),node));
+                node.SetLeftChild(new T23Node<TKey, T>(node.GetLeftKey(),node.GetLeftData(),node));
                 node.SetLeft(nKey, nData); node.ClearRight(); return false;
             }
             throw new Exception("shouldnt be here in: tree: insertLeaf");
         }
-        private bool InsertInternal(ref T23Node<TKey, T> node, ref T23Node<TKey, T> nodeIns)
+        private bool InsertInternal(T23Node<TKey, T> node, T23Node<TKey, T> nodeIns)
         {
-            if (!node.Is3Node()){ Insert2Node(ref node, nodeIns); return true;}
-            if (node.Is3Node()){ Insert3Node(ref node, nodeIns); return false;}
+            if (!node.Is3Node()){ Insert2Node(node, nodeIns); return true;}
+            if (node.Is3Node()){ Insert3Node(node, nodeIns); return false;}
             throw new Exception("shouldnt be here in: tree: insertInternal");
         }
-        private void Insert2Node(ref T23Node<TKey, T> node, T23Node<TKey, T> nodeIns)
+        private void Insert2Node(T23Node<TKey, T> node, T23Node<TKey, T> nodeIns)
         {//find where to put nodeinsert < <> >; put data there; reload children;
             if (node.GetLeftKey().CompareTo(nodeIns.GetLeftKey()) < 0) { // lkey < nkey
                 node.SetRight(nodeIns.GetLeftKey(),nodeIns.GetLeftData());
-                if(nodeIns.GetLeftChild() != null) node.SetMiddleChild(nodeIns.GetLeftChild(), ref node);
-                if(nodeIns.GetRightChild() != null) node.SetRightChild(nodeIns.GetRightChild(), ref node);
+                if(nodeIns.GetLeftChild() != null) node.SetMiddleChild(nodeIns.GetLeftChild(), node);
+                if(nodeIns.GetRightChild() != null) node.SetRightChild(nodeIns.GetRightChild(), node);
             }
             else { // nkey < lkey
                 node.SetRight(node.GetLeftKey(), node.GetLeftData());
                 node.SetLeft(nodeIns.GetLeftKey(), nodeIns.GetLeftData());
-                if(nodeIns.GetLeftChild() != null) node.SetLeftChild(nodeIns.GetLeftChild(), ref node);
-                if(nodeIns.GetRightChild() != null) node.SetMiddleChild(nodeIns.GetRightChild(), ref node);
+                if(nodeIns.GetLeftChild() != null) node.SetLeftChild(nodeIns.GetLeftChild(), node);
+                if(nodeIns.GetRightChild() != null) node.SetMiddleChild(nodeIns.GetRightChild(), node);
             }
         }
-        private void Insert3Node(ref T23Node<TKey, T> node, T23Node<TKey, T> nodeIns){
+        private void Insert3Node(T23Node<TKey, T> node, T23Node<TKey, T> nodeIns){
             if (node.GetLeftKey().CompareTo(nodeIns.GetLeftKey()) > 0) { // nkey < lkey
-                node.SetLeftChild(new T23Node<TKey, T>(node.GetRightKey(),node.GetRightData(),ref node));
-                if(node.GetMiddleChild() != null) node.GetLeftChild().SetLeftChild(node.GetMiddleChild(),ref node.GetLeftChildRef());
-                if(node.GetRightChild() != null) node.GetLeftChild().SetRightChild(node.GetRightChild(),ref node.GetLeftChildRef());
+                node.SetLeftChild(new T23Node<TKey, T>(node.GetRightKey(),node.GetRightData(), node));
+                if(node.GetMiddleChild() != null) node.GetLeftChild().SetLeftChild(node.GetMiddleChild(),node.GetLeftChild());
+                if(node.GetRightChild() != null) node.GetLeftChild().SetRightChild(node.GetRightChild(),node.GetLeftChild());
                 node.SetRightChild(node.GetLeftChild());
-                node.SetLeftChild(nodeIns,ref node);
+                node.SetLeftChild(nodeIns,node);
                 node.ClearRight();
                 node.SetMiddleChild(null);
                 //node.ClearParent();
             }
             else if (node.GetRightKey().CompareTo(nodeIns.GetLeftKey()) < 0) { // rkey < nkey
-                node.SetRightChild(new T23Node<TKey, T>(node.GetLeftKey(),node.GetLeftData(),ref node));
-                if(node.GetLeftChild() != null) node.GetRightChild().SetLeftChild(node.GetLeftChild(),ref node.GetRightChildRef());
-                if(node.GetMiddleChild() != null) node.GetRightChild().SetRightChild(node.GetMiddleChild(),ref node.GetRightChildRef());
+                node.SetRightChild(new T23Node<TKey, T>(node.GetLeftKey(),node.GetLeftData(),node));
+                if(node.GetLeftChild() != null) node.GetRightChild().SetLeftChild(node.GetLeftChild(),node.GetRightChild());
+                if(node.GetMiddleChild() != null) node.GetRightChild().SetRightChild(node.GetMiddleChild(),node.GetRightChild());
                 node.SetLeftChild(node.GetRightChild());
-                node.SetRightChild(nodeIns,ref node);
+                node.SetRightChild(nodeIns, node);
                 node.SetLeft(node.GetRightKey(), node.GetRightData());
                 node.ClearRight();
                 node.SetMiddleChild(null);
                 //node.ClearParent();
             }
             else { //lkey < nkey < rkey
-                node.SetMiddleChild(new T23Node<TKey, T>(node.GetLeftKey(),node.GetLeftData(),ref node));
-                if(node.GetLeftChild() != null) node.GetMiddleChild().SetLeftChild(node.GetLeftChild(),ref node.GetMiddleChildRef());
-                if(nodeIns.GetLeftChild() != null) node.GetMiddleChild().SetRightChild(nodeIns.GetLeftChild(),ref node.GetMiddleChildRef());
-                if(node.GetMiddleChild() != null) node.SetLeftChild(node.GetMiddleChild(),ref node);
-                node.SetMiddleChild(new T23Node<TKey, T>(node.GetRightKey(),node.GetRightData(),ref node));
-                if(nodeIns.GetRightChild() != null) node.GetMiddleChild().SetLeftChild(nodeIns.GetRightChild(),ref node.GetMiddleChildRef());
-                if(node.GetRightChild() != null) node.GetMiddleChild().SetRightChild(node.GetRightChild(),ref node.GetMiddleChildRef());
-                if(node.GetMiddleChild() != null) node.SetRightChild(node.GetMiddleChild(),ref node);
+                node.SetMiddleChild(new T23Node<TKey, T>(node.GetLeftKey(),node.GetLeftData(),node));
+                if(node.GetLeftChild() != null) node.GetMiddleChild().SetLeftChild(node.GetLeftChild(), node.GetMiddleChild());
+                if(nodeIns.GetLeftChild() != null) node.GetMiddleChild().SetRightChild(nodeIns.GetLeftChild(), node.GetMiddleChild());
+                if(node.GetMiddleChild() != null) node.SetLeftChild(node.GetMiddleChild(), node);
+                node.SetMiddleChild(new T23Node<TKey, T>(node.GetRightKey(),node.GetRightData(), node));
+                if(nodeIns.GetRightChild() != null) node.GetMiddleChild().SetLeftChild(nodeIns.GetRightChild(), node.GetMiddleChild());
+                if(node.GetRightChild() != null) node.GetMiddleChild().SetRightChild(node.GetRightChild(), node.GetMiddleChild());
+                if(node.GetMiddleChild() != null) node.SetRightChild(node.GetMiddleChild(), node);
                 node.SetLeft(nodeIns.GetLeftKey(),nodeIns.GetLeftData());
                 node.ClearRight();
                 node.SetMiddleChild(null);
@@ -154,33 +154,33 @@ namespace Semka2
         }
 //insert block end -----------------------------------------------------------------------------------------------------------
 //DELETE block----------------------------------------------------------------------------------------------------------
-        private ref T23Node<TKey, T> FindNodeToDelete(TKey keyToFind)
+        private T23Node<TKey, T> FindNodeToDelete(TKey keyToFind)
         {
-            ref var searchNow = ref _root;
+            var searchNow = _root;
             do {
                 if (keyToFind.CompareTo(searchNow.GetLeftKey()) == 0
                     || keyToFind.CompareTo(searchNow.GetRightKey()) == 0)
-                    return ref searchNow;
-                searchNow = ref searchNow.NextNode(keyToFind);
+                    return searchNow;
+                searchNow = searchNow.NextNode(keyToFind);
             } while (!searchNow.IsLeaf());
             if (keyToFind.CompareTo(searchNow.GetLeftKey()) == 0
                 || keyToFind.CompareTo(searchNow.GetRightKey()) == 0)
-                return ref searchNow;
+                return searchNow;
             throw new Exception("didnt find a match(or loop is not right) in: tree: FindNodeToDelete");
             //return ref searchNow;
         }
         public bool Delete(TKey key)
         {
-            ref var node = ref FindNodeToDelete(key);
-            if (!node.IsLeaf()) { node = ref DeleteSwitch(ref node, key); }//node switch with inordernext;
-            if(DeleteLeaf(ref node,key)) { 
+            var node = FindNodeToDelete(key);
+            if (!node.IsLeaf()) { node = DeleteSwitch(node, key); }//node switch with inordernext;
+            if(DeleteLeaf(node,key)) { 
                 _count--; 
                 if (_count != 0 && _root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
 	
             while(node != null && node.GetParent() != null && node.GetParent().GetParent() != null)
             {
-                ref var parent = ref node.GetParent();
-                if(DeleteInternal(ref node.GetParent())) { 
+                var parent = node.GetParent();
+                if(DeleteInternal(node.GetParent())) { 
                     _count--; if (_count != 0 && _root.GetParent() != null) SetRoot(_root.GetParent()); return true;}
                 if (node != null) node = node.GetParent();
                 else node = parent;
@@ -189,23 +189,23 @@ namespace Semka2
             _count--; if (_count != 0 && _root.GetParent() != null) SetRoot(_root.GetParent()); return true;
 	
         }
-        private bool DeleteLeaf(ref T23Node<TKey, T> node, TKey key){
+        private bool DeleteLeaf(T23Node<TKey, T> node, TKey key){
             if (node.Is3Node()) { //remove entry;return true;
                 if (key.CompareTo(node.GetLeftKey()) != 0){ node.SetRight(default(TKey),default(T));return true;}
                 node.SetLeft(node.GetRightKey(),node.GetRightData()); node.SetRight(default(TKey),default(T)); return true;
             }
             if (!node.Is3Node() && node.GetParent() == null) { _root = null; return true; } //its a root delete last entry; set null root; return true;
-            return DeleteInternal(ref node);
+            return DeleteInternal(node);
         }
-        private bool DeleteInternal(ref T23Node<TKey, T> node){
-            ref var nodeParent = ref node.GetParent();
-            ref var nodeSteal = ref nodeParent.GetLeftChildRef(); //only as a declaration
+        private bool DeleteInternal(T23Node<TKey, T> node){
+            var nodeParent = node.GetParent();
+            var nodeSteal = nodeParent.GetLeftChild(); //only as a declaration
             if(!nodeParent.Is3Node()){
                 if(nodeParent.GetLeftChild() == node)
                 {
                     if (nodeParent.GetRightChild().Is3Node()) { //steal from nodeParent.GetRightChild(); rotate ;return true;
-                        nodeSteal = ref nodeParent.GetRightChildRef();
-                        if(nodeSteal.GetLeftChild() != null) node.SetRightChild(nodeSteal.GetLeftChild(),ref node);
+                        nodeSteal = nodeParent.GetRightChild();
+                        if(nodeSteal.GetLeftChild() != null) node.SetRightChild(nodeSteal.GetLeftChild(), node);
                         node.SetLeft(nodeParent.GetLeftKey(),nodeParent.GetLeftData());
                         nodeParent.SetLeft(nodeSteal.GetLeftKey(),nodeSteal.GetLeftData());
                         nodeSteal.SetLeftChild(nodeSteal.GetMiddleChild());
@@ -215,19 +215,19 @@ namespace Semka2
                         return true;
                     }
                     //merge with papa; return false;
-                    ref var nodeRight = ref nodeParent.GetRightChildRef();
+                    var nodeRight = nodeParent.GetRightChild();
                     nodeRight.SetRight(nodeRight.GetLeftKey(),nodeRight.GetLeftData());
                     nodeRight.SetLeft(nodeParent.GetLeftKey(),nodeParent.GetLeftData());
                     nodeRight.SetMiddleChild(nodeRight.GetLeftChild());
-                    if(node.GetLeftChild() != null) nodeRight.SetLeftChild(node.GetLeftChild(),ref nodeRight);
+                    if(node.GetLeftChild() != null) nodeRight.SetLeftChild(node.GetLeftChild(), nodeRight);
                     nodeParent.SetLeftChild(nodeRight);
                     nodeParent.SetRightChild(null);
                     return false;
                 }
                 if (nodeParent.GetLeftChild().Is3Node()) { //steal from nodeParent.GetLeftChild(); rotate ;return true;
-                    nodeSteal = ref nodeParent.GetLeftChildRef();
+                    nodeSteal = nodeParent.GetLeftChild();
                     node.SetRightChild(node.GetLeftChild());
-                    if(nodeSteal.GetRightChild() != null) node.SetLeftChild(nodeSteal.GetRightChild(),ref node);
+                    if(nodeSteal.GetRightChild() != null) node.SetLeftChild(nodeSteal.GetRightChild(), node);
                     node.SetLeft(nodeParent.GetLeftKey(),nodeParent.GetLeftData());
                     nodeParent.SetLeft(nodeSteal.GetRightKey(),nodeSteal.GetRightData());
                     nodeSteal.SetRightChild(nodeSteal.GetMiddleChild());
@@ -236,21 +236,21 @@ namespace Semka2
                     return true;
                 }
                 //merge with papa; return false;
-                ref var nodeLeft = ref nodeParent.GetLeftChildRef();
+                var nodeLeft = nodeParent.GetLeftChild();
                 nodeLeft.SetRight(nodeParent.GetLeftKey(),nodeParent.GetLeftData());
                 nodeLeft.SetMiddleChild(nodeLeft.GetRightChild());
-                if(node.GetLeftChild() != null) nodeLeft.SetRightChild(node.GetLeftChild(),ref nodeLeft);
+                if(node.GetLeftChild() != null) nodeLeft.SetRightChild(node.GetLeftChild(), nodeLeft);
                 nodeParent.GetRightChild().ResetExceptParent();
                 node = nodeLeft;
                 return false;
             }
-            nodeSteal = ref nodeParent.GetMiddleChildRef();
+            nodeSteal = nodeParent.GetMiddleChild();
             if (nodeParent.GetLeftChild() == node)
             {
                 if (nodeParent.GetMiddleChild().Is3Node())
                 { //steal from nodeParent.GetMiddleChild() left; rotate; return true;
                     //left rotation
-                    if(nodeSteal.GetLeftChild() != null) node.SetRightChild(nodeSteal.GetLeftChild(),ref node);
+                    if(nodeSteal.GetLeftChild() != null) node.SetRightChild(nodeSteal.GetLeftChild(), node);
                     node.SetLeft(nodeParent.GetLeftKey(),nodeParent.GetLeftData());
                     nodeParent.SetLeft(nodeSteal.GetLeftKey(),nodeSteal.GetLeftData());
                     nodeSteal.SetLeftChild(nodeSteal.GetMiddleChild());
@@ -261,11 +261,11 @@ namespace Semka2
                 }
                 else//parent.middle child is not a 3node
                 {
-                    ref var nodeMid = ref nodeParent.GetMiddleChildRef();
+                    var nodeMid = nodeParent.GetMiddleChild();
                     node.SetLeft(nodeParent.GetLeftKey(),nodeParent.GetLeftData());
                     node.SetRight(nodeMid.GetLeftKey(),nodeMid.GetLeftData());
-                    if(nodeMid.GetLeftChild() != null) node.SetMiddleChild(nodeMid.GetLeftChild(),ref node);
-                    if(nodeMid.GetRightChild() != null) node.SetRightChild(nodeMid.GetRightChild(),ref node);
+                    if(nodeMid.GetLeftChild() != null) node.SetMiddleChild(nodeMid.GetLeftChild(), node);
+                    if(nodeMid.GetRightChild() != null) node.SetRightChild(nodeMid.GetRightChild(), node);
                     nodeParent.SetMiddleChild(null);
                     nodeParent.SetLeft(nodeParent.GetRightKey(),nodeParent.GetRightData());
                     nodeParent.ClearRight();
@@ -279,7 +279,7 @@ namespace Semka2
                     //steal from nodeParent.GetMiddleChild() right; rotate; return true;
                     //right rotation
                     node.SetRightChild(node.GetLeftChild()); //ever get here: haha prob duplicate
-                    if (nodeSteal.GetRightChild() != null) node.SetLeftChild(nodeSteal.GetRightChild(), ref node);
+                    if (nodeSteal.GetRightChild() != null) node.SetLeftChild(nodeSteal.GetRightChild(), node);
                     node.SetLeft(nodeParent.GetRightKey(), nodeParent.GetRightData());
                     nodeParent.SetRight(nodeSteal.GetRightKey(), nodeSteal.GetRightData());
                     nodeSteal.SetRightChild(nodeSteal.GetMiddleChild());
@@ -289,12 +289,12 @@ namespace Semka2
                 }
                 else//parent.middle child is not a 3node
                 {
-                    ref var nodeMid = ref nodeParent.GetMiddleChildRef();
+                    var nodeMid = nodeParent.GetMiddleChild();
                     node.SetLeft(nodeMid.GetLeftKey(),nodeMid.GetLeftData());
                     node.SetRight(nodeParent.GetRightKey(),nodeParent.GetRightData());
                     node.SetRightChild(node.GetLeftChild());
-                    if(nodeMid.GetLeftChild() != null) node.SetMiddleChild(nodeMid.GetRightChild(),ref node);
-                    if(nodeMid.GetRightChild() != null) node.SetLeftChild(nodeMid.GetLeftChild(),ref node);
+                    if(nodeMid.GetLeftChild() != null) node.SetMiddleChild(nodeMid.GetRightChild(), node);
+                    if(nodeMid.GetRightChild() != null) node.SetLeftChild(nodeMid.GetLeftChild(), node);
                     nodeParent.SetMiddleChild(null);
                     nodeParent.ClearRight();
                     return true;
@@ -302,9 +302,9 @@ namespace Semka2
             }
             if(nodeParent.GetMiddleChild() == node) {
                 if (nodeParent.GetLeftChild().Is3Node()) { //steal from nodeParent.GetLeftChild(); rotate; return true;
-                    nodeSteal = ref nodeParent.GetLeftChildRef(); //right rotation
+                    nodeSteal = nodeParent.GetLeftChild(); //right rotation
                     node.SetRightChild(node.GetLeftChild());
-                    if(nodeSteal.GetRightChild() != null) node.SetLeftChild(nodeSteal.GetRightChild(),ref node);
+                    if(nodeSteal.GetRightChild() != null) node.SetLeftChild(nodeSteal.GetRightChild(), node);
                     node.SetLeft(nodeParent.GetLeftKey(),nodeParent.GetLeftData());
                     nodeParent.SetLeft(nodeSteal.GetRightKey(),nodeSteal.GetRightData());
                     nodeSteal.SetRightChild(nodeSteal.GetMiddleChild());
@@ -313,8 +313,8 @@ namespace Semka2
                     return true;
                 }
                 if(nodeParent.GetRightChild().Is3Node()){ //steal from nodeParent.GetRightChild(); rotate; return true;
-                    nodeSteal = ref nodeParent.GetRightChildRef(); //left rotation
-                    if(nodeSteal.GetLeftChild() != null) node.SetRightChild(nodeSteal.GetLeftChild(),ref node);
+                    nodeSteal = nodeParent.GetRightChild(); //left rotation
+                    if(nodeSteal.GetLeftChild() != null) node.SetRightChild(nodeSteal.GetLeftChild(), node);
                     node.SetLeft(nodeParent.GetRightKey(),nodeParent.GetRightData());
                     nodeParent.SetRight(nodeSteal.GetLeftKey(),nodeSteal.GetLeftData());
                     nodeSteal.SetLeftChild(nodeSteal.GetMiddleChild());
@@ -323,9 +323,9 @@ namespace Semka2
                     nodeSteal.ClearRight();
                     return true;
                 }
-                ref var nodeLeft = ref nodeParent.GetLeftChildRef(); //left rotation - kindof
+                var nodeLeft = nodeParent.GetLeftChild(); //left rotation - kindof
                 nodeLeft.SetMiddleChild(nodeLeft.GetRightChild());
-                if(node.GetLeftChild() != null) nodeLeft.SetRightChild(node.GetLeftChild(),ref nodeLeft);
+                if(node.GetLeftChild() != null) nodeLeft.SetRightChild(node.GetLeftChild(), nodeLeft);
                 nodeLeft.SetRight(nodeParent.GetLeftKey(),nodeParent.GetLeftData());
                 nodeParent.SetLeft(nodeParent.GetRightKey(),nodeParent.GetRightData());
                 nodeParent.ClearRight();
@@ -335,27 +335,27 @@ namespace Semka2
             throw new Exception("shouldnt be here in: tree: DeleteInternal");
             //merge with papa; return false;
         }
-        private ref T23Node<TKey, T> DeleteSwitch(ref T23Node<TKey, T> node, TKey key)
+        private T23Node<TKey, T> DeleteSwitch(T23Node<TKey, T> node, TKey key)
         {
             if (key.CompareTo(node.GetLeftKey()) == 0) {//key is leftval
                 var tempData = node.GetLeftData();
-                ref var switchNode = ref this.InOrderNextNodeRef(ref node, key);
+                var switchNode = this.InOrderNextNode(node, key);
                 node.SetLeft(switchNode.GetLeftKey(),switchNode.GetLeftData());
                 switchNode.SetLeft(key,tempData);
-                return ref switchNode;
+                return switchNode;
             }
             else { //key is rightval
                 var tempData = node.GetRightData();
-                ref var switchNode = ref this.InOrderNextNodeRef(ref node, key);
+                var switchNode = this.InOrderNextNode(node, key);
                 node.SetRight(switchNode.GetLeftKey(),switchNode.GetLeftData());
                 switchNode.SetLeft(key,tempData);
-                return ref switchNode;
+                return switchNode;
             }
         }
 //delete block end -----------------------------------------------------------------------------------------------------------
-        public ref T23Node<TKey, T> GetRoot()
+        public T23Node<TKey, T> GetRoot()
         {
-            return ref _root;
+            return _root;
         }
         public void SetRoot(T23Node<TKey, T> newRoot)
         {
@@ -397,19 +397,6 @@ namespace Semka2
             } while (!searchNow.IsLeaf());
             //throw new Exception("didnt find key in: tree: GetData");
             return default(T);
-        }
-        public ref T GetDataRef(TKey keyToFind)
-        {
-            ref var searchNow = ref _root;
-            if (keyToFind.CompareTo(searchNow.GetLeftKey()) == 0) return ref searchNow.GetLeftDataRef();
-            if (keyToFind.CompareTo(searchNow.GetRightKey()) == 0) return ref searchNow.GetRightDataRef();
-            do
-            {
-                searchNow = searchNow.NextNode(keyToFind);
-                if (keyToFind.CompareTo(searchNow.GetLeftKey()) == 0) return ref searchNow.GetLeftDataRef();
-                if (keyToFind.CompareTo(searchNow.GetRightKey()) == 0) return ref searchNow.GetRightDataRef();
-            } while (!searchNow.IsLeaf());
-            throw new Exception("didnt find key in: tree: GetData");
         }
         public int CountEntries() {
             if (_root == null) return 0;
@@ -521,10 +508,10 @@ namespace Semka2
         }
         public ref T23Node<TKey, T> InOrderNextNodeRef(ref T23Node<TKey, T> n, TKey k)
         {
-            if(n.Is3Node() && n.GetLeftKey().CompareTo(k) == 0) n = ref n.GetMiddleChildRef();
-            else n = ref n.GetRightChildRef();
+            if(n.Is3Node() && n.GetLeftKey().CompareTo(k) == 0) n = n.GetMiddleChild();
+            else n = n.GetRightChild();
             while (!n.IsLeaf()) {
-                n = ref n.GetLeftChildRef();
+                n = n.GetLeftChild();
             }
             return ref n;
         }
@@ -573,7 +560,7 @@ namespace Semka2
                 if (minK.CompareTo(searchNow.GetLeftKey()) == 0
                     || minK.CompareTo(searchNow.GetRightKey()) == 0)
                     return searchNow;
-                searchNow = ref searchNow.NextNode(minK);
+                searchNow = searchNow.NextNode(minK);
             }
             return searchNow;
         }

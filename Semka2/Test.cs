@@ -376,9 +376,9 @@ namespace Semka2
             var dum = new DummyClass();
             for (int i = 0; i < nOfInsertions; i++)
             {
-                if (suborHandler.ReadFromFile((long)keysFile[i],dum) == default) continue;
-                if (suborHandler.ReadFromFile((long)keysFile[i],dum).ToString().CompareTo((string)dataTest[i]) != 0)
-                    { foundMistake = true; Console.WriteLine("\n" + i + "\n" + suborHandler.ReadFromFile((long)keysFile[i],dum).ToString() + "\n" + dataTest[i].ToString());
+                if (suborHandler.ReadFromFile((long)keysFile[i]) == default) continue;
+                if (suborHandler.ReadFromFile((long)keysFile[i]).ToString().CompareTo((string)dataTest[i]) != 0)
+                    { foundMistake = true; Console.WriteLine("\n" + i + "\n" + suborHandler.ReadFromFile((long)keysFile[i]).ToString() + "\n" + dataTest[i].ToString());
                     break; }
             }
             Console.WriteLine(foundMistake ? "FAIL" : "PASS");
@@ -445,7 +445,7 @@ namespace Semka2
                 if (nf < findsFraction && countNow != 0)
                 {
                     var findWhat = rand.Next(countNow);
-                    suborHandler.ReadFromFile((long)keysFile[findWhat],new DummyClass());
+                    suborHandler.ReadFromFile((long)keysFile[findWhat]);
                     iFind++;
 
                     /*//tests 
@@ -472,13 +472,20 @@ namespace Semka2
                 dataTest.Add(dummy.ToString());
                 keysFile.Add(suborHandler.InsertToFile(dummy));
 
-                if (j % 100000 == 0) System.Console.Write("|");
-                else if (j % 10000 == 0) System.Console.Write(",");
-                else if (j % 1000 == 0) System.Console.Write(".");
+                if (j % 1000000 == 0) System.Console.Write("|");
+                else if (j % 100000 == 0) System.Console.Write(",");
+                else if (j % 10000 == 0) System.Console.Write(".");
 
                 iIns++;
                 iAll++;
             }
+
+            var dumms = new DummyClass("Tomas Serdel", 1.0, 1998);
+            dataTest.Add(dumms.ToString());
+            keysFile.Add(suborHandler.InsertToFile(dumms));
+            iIns++;
+            iAll++;
+
             //tests
             System.Console.WriteLine("DONE");
             Console.Write("Length Test.....");
@@ -488,12 +495,12 @@ namespace Semka2
             var dum = new DummyClass();
             for (int j = 0; j < dataTest.Count; j++)
             {
-                if (suborHandler.ReadFromFile((long)keysFile[j],dum) == default) continue;
-                if (!dataTest.Contains(suborHandler.ReadFromFile((long)keysFile[j],dum).ToString()))
+                if (suborHandler.ReadFromFile((long)keysFile[j]) == default) continue;
+                if (!dataTest.Contains(suborHandler.ReadFromFile((long)keysFile[j]).ToString()))
                 {
                     foundMistake = true; 
                     Console.WriteLine("\n" + j + "\n" 
-                        + suborHandler.ReadFromFile((long)keysFile[j],dum).ToString() + "\n" 
+                        + suborHandler.ReadFromFile((long)keysFile[j]).ToString() + "\n" 
                         + dataTest[j].ToString());
                     break;
                 }

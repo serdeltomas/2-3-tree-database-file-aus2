@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Semka2
 {
-    public interface IDataToFIle<T>
+    static class BytesAdder
     {
-        public byte[] ToByteArray();
-        public T FromByteArray(byte[] pArray);
-        public int Size();
         public static byte[] AddBytes(byte[] pA, byte[] pB)
         {
             var z = new byte[pA.Length + pB.Length];

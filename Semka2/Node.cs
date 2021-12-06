@@ -6,87 +6,77 @@ using System.Threading;
 
 namespace Semka2
 {
-    public class T23Node<TKey,T> where TKey: IComparable<TKey>
+    public class T23Node<TKey,T> : IDataToFIle<T23Node<TKey, T>> where TKey: IComparable<TKey>, IDataToFIle<TKey> where T : IDataToFIle<T> 
     {
-        private T _lData;
-        private T _rData;
-        private TKey _lKey;
-        private TKey _rKey;
+        private FIleHandler<T> _dataFile;
+        private long _lData;
+        private long _rData;
 
-        private T23Node<TKey,T> _parent;
-        private T23Node<TKey,T> _lChild;
-        private T23Node<TKey,T> _mChild;
-        private T23Node<TKey,T> _rChild;
+        private FIleHandler<TKey> _keysFile;
+        private long _lKey;
+        private long _rKey;
 
-        public T23Node() { _lChild = _mChild = _rChild = null; }
-        public T23Node (T23Node<TKey,T> copyThis) {
-            _lData = copyThis.GetLeftData(); _rData = copyThis.GetRightData(); _lKey = copyThis.GetLeftKey();
-            _rKey = copyThis.GetRightKey(); _parent = copyThis.GetParent(); _lChild = copyThis.GetLeftChild();
-            _mChild = copyThis.GetMiddleChild(); _rChild = copyThis.GetRightChild();
-        }
+        private FIleHandler<T23Node<TKey, T>> _nodesFile;
+        private long _parent;
+        private long _lChild;
+        private long _mChild;
+        private long _rChild;
+
+        private const int FULL_MAX_LEN = 8*sizeof(long);
+
         public T23Node (TKey keyL, T dataL) {
-            _lData = dataL;_lKey = keyL;
+            _lData = _dataFile.InsertToFile(dataL) ;_lKey = _keysFile.InsertToFile(keyL);
         }
-        public T23Node (TKey keyL, T dataL, ref T23Node<TKey,T> nParent) {
-            _lData = dataL; _lKey = keyL; _parent = nParent;
+        public T23Node (TKey keyL, T dataL, T23Node<TKey,T> nParent) {
+            _lData = _dataFile.InsertToFile(dataL); _lKey = _keysFile.InsertToFile(keyL); _parent = _nodesFile.InsertToFile(nParent);
         }//with parent
-        public T23Node (TKey keyL, T dataL, TKey keyR, T dataR) {
-            _lData = dataL; _rData = dataR; _lKey = keyL; _rKey = keyR;
-        }
-        public T23Node (TKey keyL, T dataL, TKey keyR, T dataR,
-                     ref T23Node<TKey,T> childL, ref T23Node<TKey,T> childM, ref T23Node<TKey,T> childR) {
-                     _lData = dataL; _rData = dataR; _lKey = keyL; _rKey = keyR;
-                     _lChild = childL; _mChild = childM; _rChild = childR;
-                 }
-        public T23Node (TKey keyL, T dataL, TKey keyR, T dataR, ref T23Node<TKey,T> nParent,//with parent
-            ref T23Node<TKey,T> childL, ref T23Node<TKey,T> childM, ref T23Node<TKey,T> childR) {
-            _lData = dataL; _rData = dataR; _lKey = keyL; _rKey = keyR;
-            _parent = nParent; _lChild = childL; _mChild = childM; _rChild = childR;
-        }
-        
-        public TKey GetLeftKey() { return _lKey; }
-        public T GetLeftData() { return _lData; }
-        public ref T GetLeftDataRef() { return ref _lData; }
-        public void SetLeft(TKey nKey, T nData) { _lKey = nKey; _lData = nData; }
-        public TKey GetRightKey() { return _rKey; }
-        public T GetRightData() { return _rData; }
-        public ref T GetRightDataRef() { return ref _rData; }
-        public void SetRight(TKey nKey, T nData) { _rKey = nKey; _rData = nData; }
-        public void ClearRight() { _rKey = default(TKey); _rData = default(T); }
-        public ref T23Node<TKey,T> GetParent() { return ref _parent; }
-        public void SetParent(ref T23Node<TKey,T> newParent) { _parent = newParent; }
-        public void ClearParent() { _parent = null; }
-        public T23Node<TKey,T> GetLeftChild() { return _lChild; }
-        public ref T23Node<TKey,T> GetLeftChildRef() { return ref _lChild; }
-        public void SetLeftChild(T23Node<TKey,T> newVal) { _lChild = newVal; } 
-        public void SetLeftChild(T23Node<TKey,T> newVal, ref T23Node<TKey,T> nPar) { _lChild = newVal; _lChild.SetParent(ref nPar); } 
-        public T23Node<TKey,T> GetMiddleChild() { return _mChild; }
-        public ref T23Node<TKey,T> GetMiddleChildRef() { return ref _mChild; }
-        public void SetMiddleChild(T23Node<TKey,T> newVal) { _mChild = newVal; }
-        public void SetMiddleChild(T23Node<TKey,T> newVal, ref T23Node<TKey,T> nPar) { _mChild = newVal; _mChild.SetParent(ref nPar); } 
-        public T23Node<TKey,T> GetRightChild() { return _rChild; }
-        public ref T23Node<TKey,T> GetRightChildRef() { return ref _rChild; }
-        public void SetRightChild(T23Node<TKey,T> newVal) { _rChild = newVal; }
-        public void SetRightChild(T23Node<TKey,T> newVal, ref T23Node<TKey,T> nPar) { _rChild = newVal; _rChild.SetParent(ref nPar); } 
+        public TKey GetLeftKey() { return _keysFile.ReadFromFile(_lKey); }
+        public T GetLeftData() { return _dataFile.ReadFromFile(_lData); }
+        public void SetLeft(TKey nKey, T nData) { _lKey = _keysFile.InsertToFile(nKey); _lData = _dataFile.InsertToFile(nData); }
+        public void SetLeft(long nKey, long nData) { _lKey = nKey; _lData = nData; }
+        public TKey GetRightKey() { return _keysFile.ReadFromFile(_rKey); }
+        public T GetRightData() { return _dataFile.ReadFromFile(_rData); }
+        public void SetRight(TKey nKey, T nData) { _rKey = _keysFile.InsertToFile(nKey); _rData = _dataFile.InsertToFile(nData); }
+        public void SetRight(long nKey, long nData) { _rKey = nKey; _rData = nData; }
+        public void ClearRight() { _rKey = -1; _rData = -1; }
+        public T23Node<TKey,T> GetParent() { return _nodesFile.ReadFromFile(_parent); }
+        public long GetParentPos() { return _parent; }
+        public void ClearParent() { _parent = -1; }
+        public T23Node<TKey,T> GetLeftChild() { return _nodesFile.ReadFromFile(_lChild); }
+        public void SetLeftChild(T23Node<TKey, T> newVal) { _lChild = _nodesFile.InsertToFile(newVal); }
+        public void SetLeftChild(long newVal) { _lChild = newVal; }
+        public void SetLeftChild(T23Node<TKey,T> newVal, T23Node<TKey,T> nPar) { _lChild = _nodesFile.InsertToFile(newVal); _nodesFile.ReadFromFile(_lChild).SetParent(nPar); }
+        public void SetLeftChild(long newVal, long nPar) { _lChild = newVal; _nodesFile.ReadFromFile(_lChild).SetParent(nPar); }
+        public T23Node<TKey,T> GetMiddleChild() { return _nodesFile.ReadFromFile(_mChild); }
+        public void SetMiddleChild(T23Node<TKey,T> newVal) { _mChild = _nodesFile.InsertToFile(newVal); }
+        public void SetMiddleChild(long newVal) { _mChild = newVal; }
+        public void SetMiddleChild(T23Node<TKey,T> newVal, T23Node<TKey,T> nPar) { _mChild = _nodesFile.InsertToFile(newVal); _nodesFile.ReadFromFile(_mChild).SetParent(nPar); }
+        public void SetMiddleChild(long newVal, long nPar) { _mChild = newVal; _nodesFile.ReadFromFile(_mChild).SetParent(nPar); }
+        private void SetParent(T23Node<TKey, T> nPar) { _parent = _nodesFile.InsertToFile(nPar); }
+        private void SetParent(long nPar) { _parent =nPar; }
+        public T23Node<TKey,T> GetRightChild() { return _nodesFile.ReadFromFile(_rChild); }
+        public void SetRightChild(T23Node<TKey,T> newVal) { _rChild = _nodesFile.InsertToFile(newVal); }
+        public void SetRightChild(long newVal) { _rChild = newVal; }
+        public void SetRightChild(T23Node<TKey,T> newVal, T23Node<TKey,T> nPar) { _rChild = _nodesFile.InsertToFile(newVal); _nodesFile.ReadFromFile(_rChild).SetParent(nPar); }
+        public void SetRightChild(long newVal, long nPar) { _rChild = newVal; _nodesFile.ReadFromFile(_rChild).SetParent(nPar); }
         public int GetLevel()
         {
             int count = 0;
             var parent = _parent;
-            while (parent!=null) {
+            while (parent!=-1) {
                 count++;
-                parent = parent.GetParent();
+                parent = _nodesFile.ReadFromFile(parent).GetParentPos();
             }
             return count;
         }
-        public bool IsLeaf() { return _lChild == null; }
-
+        public bool IsLeaf() { return _lChild == -1; }
         public bool AddInCaseOfLeaf(TKey nKey, T nData) // true if success
         {
-            if (_rData == null && _lChild != null) // not a 3node and a leaf
+            if (_rData == -1 && _lChild != -1) // not a 3node and a leaf
             {
-                if (nKey.CompareTo(_lKey) < 0) // nkey < lkey
+                if (nKey.CompareTo(_keysFile.ReadFromFile(_lKey)) < 0) // nkey < lkey
                 {
-                    SetRight(_lKey, _lData);
+                    SetRight(_keysFile.ReadFromFile(_lKey), _dataFile.ReadFromFile(_lData));
                     SetLeft(nKey, nData);
                     return true;
                 }
@@ -98,18 +88,18 @@ namespace Semka2
             }
             else return false;
         }
-        public ref T23Node<TKey,T> NextNode(TKey nKey) // true if success
+        public T23Node<TKey,T> NextNode(TKey nKey) // true if success
         {
-            if (nKey.CompareTo(_lKey) < 0) return ref _lChild; // nkey < lkey
-            else if (_rData != null && nKey.CompareTo(_rKey) < 0) return ref _mChild; // lkey < nkey < rkey
-            else return ref _rChild; // rkey < nkey
+            if (nKey.CompareTo(_keysFile.ReadFromFile(_lKey)) < 0) return _nodesFile.ReadFromFile(_lChild); // nkey < lkey
+            else if (_rData != -1 && nKey.CompareTo(_keysFile.ReadFromFile(_rKey)) < 0) return _nodesFile.ReadFromFile(_mChild); // lkey < nkey < rkey
+            else return _nodesFile.ReadFromFile(_rChild); // rkey < nkey
             
             throw new Exception("in: node: nextnode()");
         }
         public override string ToString()
         {
             string ret = " ";
-            if (_lData != null)
+            if (_lData != -1)
             {
                 ret += _lData.ToString();
             }
@@ -118,7 +108,7 @@ namespace Semka2
                 ret += "----";
             }
             ret += " , ";
-            if (_rData != null)
+            if (_rData != -1)
             {
                 ret += _rData.ToString();
             }
@@ -134,20 +124,31 @@ namespace Semka2
             if (!Is3Node()) return _lData.ToString() + "/n";
             return _lData.ToString() + "/n" + _rData.ToString() + "/n";
         }
-
         public bool Is3Node()
         {
-            return _rData != null;
+            return _rData != -1;
         }
         public void ResetExceptParent()
         {
-            _lChild = null; _rChild = null; _mChild = null;
-            _lKey = default(TKey); _lData = default(T); ClearRight();
+            _lChild = -1; _rChild = -1; _mChild = -1;
+            _lKey = -1; _lData = -1; ClearRight();
         }
         public T GetData(TKey key)
         {
-            if (key.CompareTo(_lKey) == 0) return _lData;
-            return _rData;
+            if (key.CompareTo(_keysFile.ReadFromFile(_lKey)) == 0) return _dataFile.ReadFromFile(_lData);
+            return _dataFile.ReadFromFile(_rData);
+        }
+        public byte[] ToByteArray()
+        {
+            throw new NotImplementedException();
+        }
+        public T23Node<TKey, T> FromByteArray(byte[] pArray)
+        {
+            throw new NotImplementedException();
+        }
+        public int Size()
+        {
+            throw new NotImplementedException();
         }
     }
 }

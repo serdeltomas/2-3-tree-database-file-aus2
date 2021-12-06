@@ -47,7 +47,9 @@ namespace Semka2
 		}
 		~FIleHandler()
 		{
+			_fileData.Flush();
 			_fileData.Close();
+			_fileTemp.Flush();
 			_fileTemp.Close();
 		}
 		public long InsertToFile(T pData)
@@ -61,12 +63,12 @@ namespace Semka2
 			_fileData.Seek(where * _lengthOfRecord, SeekOrigin.Begin);
 			var nPos = _fileData.Position/_lengthOfRecord;
 			foreach (byte bt in pData.ToByteArray()) _fileData.WriteByte(bt);
-			_fileData.Flush(); 
+			//_fileData.Flush(); 
 			_count++;
 			return nPos;
 		}
 
-		public T ReadFromFile(long pWhere, T pData)
+		public T ReadFromFile(long pWhere)
 		{
 			if (_freeSpace.Contains(pWhere) || _fileData.Seek(pWhere * _lengthOfRecord, SeekOrigin.Begin) > _fileData.Seek(-_lengthOfRecord, SeekOrigin.End)) return default;
 			_fileData.Seek(pWhere * _lengthOfRecord, SeekOrigin.Begin);
@@ -78,7 +80,8 @@ namespace Semka2
 				byteArr[count] = (byte)b;
 				count++;
 			}
-			return pData.FromByteArray(byteArr);
+			T instance = (T)Activator.CreateInstance<T>();
+			return instance.FromByteArray(byteArr);
 		}
 		public bool DeleteFromFile(long pWhere)
 		{

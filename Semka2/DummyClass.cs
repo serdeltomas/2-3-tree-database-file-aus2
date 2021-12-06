@@ -14,7 +14,7 @@ namespace Semka2
         private const int A1_MAX_LEN = 15;
         private const int A2_MAX_LEN = sizeof(Double);
         private const int A3_MAX_LEN = sizeof(Int32);
-        private const int FULL_MAX_LEN = sizeof(Int32) + A1_MAX_LEN * sizeof(char) + A2_MAX_LEN + A3_MAX_LEN;
+        private const int FULL_MAX_LEN = sizeof(Int32) + A1_MAX_LEN * sizeof(char) + A2_MAX_LEN + A3_MAX_LEN + sizeof(char);
         public DummyClass(string p1, double p2, int p3)
         {
             _a1 = p1;
@@ -51,14 +51,15 @@ namespace Semka2
         public byte[] ToByteArray()
         {
             var rt = new byte[0];
-            rt = AddBytes(rt, BitConverter.GetBytes(_a1.Length));
+            rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(_a1.Length));
             var a1 =_a1.PadLeft(A1_MAX_LEN);
             foreach (var ch in a1) {
-                rt = AddBytes(rt, BitConverter.GetBytes(ch)); }
-            rt = AddBytes(rt, BitConverter.GetBytes(_a2));
-            rt = AddBytes(rt, BitConverter.GetBytes(_a3));
+                rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(ch)); }
+            rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(_a2));
+            rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(_a3));
+            rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes('\n'));
             return rt;
-                //Encoding.ASCII.GetBytes(_a1.PadLeft(A1_LEN) + _a2.ToString("0000000000.0000000000000000000") + _a3.ToString(new String('0',A3_LEN)));
+            //Encoding.ASCII.GetBytes(_a1.PadLeft(A1_LEN) + _a2.ToString("0000000000.0000000000000000000") + _a3.ToString(new String('0',A3_LEN)));
         }
 
         override public string ToString()
@@ -66,12 +67,5 @@ namespace Semka2
             return _a1.Length + " " + _a1 + " " + _a2 + " " + _a3;
         }
 
-        private byte[] AddBytes(byte[] pA, byte[] pB)
-        {
-            var z = new byte[pA.Length + pB.Length];
-            pA.CopyTo(z, 0);
-            pB.CopyTo(z, pA.Length);
-            return z;
-        }
     }
 }

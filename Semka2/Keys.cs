@@ -2,9 +2,11 @@
 
 namespace Semka2
 {
-    class KeyStr : IComparable<KeyStr>
+    class KeyStr : IComparable<KeyStr> , IDataToFIle<KeyStr>
     {
         private string _keyVal;
+        private const int KEY_MAX_LEN = 20;
+        private const int FULL_MAX_LEN = KEY_MAX_LEN * sizeof(char);
 
         public KeyStr(string key)
         {
@@ -28,10 +30,25 @@ namespace Semka2
             return _keyVal;
         }
 
+        public byte[] ToByteArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public KeyStr FromByteArray(byte[] pArray)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Size()
+        {
+            return FULL_MAX_LEN;
+        }
     }
-    class KeyInt : IComparable<KeyInt>
+    class KeyInt : IComparable<KeyInt>, IDataToFIle<KeyInt>
     {
         private int _keyVal;
+        private const int FULL_MAX_LEN = sizeof(int);
 
         public KeyInt(int key)
         {
@@ -55,11 +72,27 @@ namespace Semka2
             return _keyVal.ToString();
         }
 
+        public byte[] ToByteArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public KeyInt FromByteArray(byte[] pArray)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Size()
+        {
+            return FULL_MAX_LEN;
+        }
     }
-    class KeyDat : IComparable<KeyDat>
+    class KeyDat : IComparable<KeyDat>, IDataToFIle<KeyDat>
     {
         private DateTime _keyVal;
         private int _keyValPlus;
+        private const int KEY_MAX_LEN = 20;
+        private const int FULL_MAX_LEN = KEY_MAX_LEN + sizeof(int);
 
         public KeyDat(DateTime key, int keyPlus)
         {
@@ -86,11 +119,27 @@ namespace Semka2
             return _keyVal.ToString();
         }
 
+        public byte[] ToByteArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public KeyDat FromByteArray(byte[] pArray)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Size()
+        {
+            return FULL_MAX_LEN;
+        }
     }
-    class KeyRodCis : IComparable<KeyRodCis>
+    class KeyRodCis : IComparable<KeyRodCis>, IDataToFIle<KeyRodCis>
     {
         private string _keyVal;
         private int _keyValPlus;
+        private const int KEY_MAX_LEN = 10;
+        private const int FULL_MAX_LEN = KEY_MAX_LEN * sizeof(char) + sizeof(int);
 
         public KeyRodCis(string key, int keyPlus)
         {
@@ -117,5 +166,19 @@ namespace Semka2
             return _keyVal.ToString();
         }
 
+        public byte[] ToByteArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public KeyRodCis FromByteArray(byte[] pArray)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Size()
+        {
+            return FULL_MAX_LEN;
+        }
     }
 }
