@@ -8,12 +8,12 @@ namespace Semka2
 {
     public class App
     {
-        private T23Tree<KeyStr, Osoba> _strOsobyPcrDatum = new T23Tree<KeyStr, Osoba>();
-        private T23Tree<KeyDat, PcrTest> _strPcrDatum = new T23Tree<KeyDat, PcrTest>();//data is saved here... ostatne su iba ref
-        private T23Tree<KeyInt, PcrTest> _strPcrID = new T23Tree<KeyInt, PcrTest>();
-        private T23Tree<KeyInt, Miesto> _strKrajPcrDatum = new T23Tree<KeyInt, Miesto>();//pridany novy strom testov podla datumu
-        private T23Tree<KeyInt, Miesto> _strOkresPcrDatum = new T23Tree<KeyInt, Miesto>();
-        private T23Tree<KeyInt, Miesto> _strPracoviskoPcrDatum = new T23Tree<KeyInt, Miesto>();
+        private BTree<KeyStr, Osoba> _strOsobyPcrDatum = new BTree<KeyStr, Osoba>();
+        private BTree<KeyDat, PcrTest> _strPcrDatum = new BTree<KeyDat, PcrTest>();//data is saved here... ostatne su iba ref
+        private BTree<KeyInt, PcrTest> _strPcrID = new BTree<KeyInt, PcrTest>();
+        private BTree<KeyInt, Miesto> _strKrajPcrDatum = new BTree<KeyInt, Miesto>();//pridany novy strom testov podla datumu
+        private BTree<KeyInt, Miesto> _strOkresPcrDatum = new BTree<KeyInt, Miesto>();
+        private BTree<KeyInt, Miesto> _strPracoviskoPcrDatum = new BTree<KeyInt, Miesto>();
         //private List<KeyInt> _pcrIdList = new List<KeyInt>();
         private List<string> _rodCisList = new List<string>();
         private const int KRAJCOUNT = 9; // 1-8

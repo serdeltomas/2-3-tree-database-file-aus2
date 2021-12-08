@@ -19,7 +19,7 @@ namespace Semka2
             //var rand = new Random(1);
             var rand = new Random();
             
-            var stromOsoby = new T23Tree<KeyStr,Osoba>();
+            var stromOsoby = new BTree<KeyStr,Osoba>();
             var cisla = new Int32[nOfInsertions+1];
             var keysTest = new ArrayList(nOfInsertions);
             var keysTree = new ArrayList(nOfInsertions);
@@ -97,7 +97,7 @@ namespace Semka2
             //var rand = new Random(1);
             var rand = new Random();
             
-            var stromOsoby = new T23Tree<KeyInt,Osoba>();
+            var stromOsoby = new BTree<KeyInt,Osoba>();
             var cisla = new Int32[nOfInsertions+1];
             var keysTest = new List<KeyInt>(nOfInsertions);
             //var keysTree = new ArrayList(nOfInsertions);
@@ -176,7 +176,7 @@ namespace Semka2
             var iDel = 0;
             var iIns = 0;
             var iFind = 0;
-            var stromOsoby = new T23Tree<KeyStr,Osoba>();
+            var stromOsoby = new BTree<KeyStr,Osoba>();
             var keysTest = new ArrayList(nOfInsertions);
             var keysTree = new ArrayList(nOfInsertions);
             Console.Write("INSERT:DELETE:FIND(" + nOfInsertions + ":" + (int)(nOfInsertions*deletionsFraction) + ":" + (int)(nOfInsertions * findsFraction) + ")");
@@ -305,7 +305,7 @@ namespace Semka2
             int nOfInsertions =3;
             var rand = new Random();
             
-            var stromOsoby = new T23Tree<KeyStr,Osoba>();
+            var stromOsoby = new BTree<KeyStr,Osoba>();
             var cisla = new Int32[nOfInsertions+1];
             var keysTest = new ArrayList(nOfInsertions);
             var keysTree = new ArrayList(nOfInsertions);
@@ -417,6 +417,7 @@ namespace Semka2
                     keysFile.RemoveAt(delWhat);
                     dataTest.RemoveAt(delWhat);
                     iDel++;
+                    iAll--;
 
                     //tests 
                     /*
@@ -480,11 +481,16 @@ namespace Semka2
                 iAll++;
             }
 
+            var delWat = rand.Next(dataTest.Count);
+            suborHandler.DeleteFromFile((long)keysFile[delWat]);
+            keysFile.RemoveAt(delWat);
+            dataTest.RemoveAt(delWat);
+            iDel++;
+
             var dumms = new DummyClass("Tomas Serdel", 1.0, 1998);
             dataTest.Add(dumms.ToString());
             keysFile.Add(suborHandler.InsertToFile(dumms));
             iIns++;
-            iAll++;
 
             //tests
             System.Console.WriteLine("DONE");
@@ -511,6 +517,281 @@ namespace Semka2
             Console.WriteLine(foundMistake ? "FAIL" : "PASS");
             Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
         }
+        public void TestInsertTreeFile(int nOfInsertions)
+        {
+            var firstNames = new string[]{
+                "Noah" ,"Liam" ,"William" ,"Mason" , "James" ,"Benjamin" ,"Jacob" , "Michael" ,"Elijah" ,"Ethan" ,
+                "Alexander" ,"Oliver" ,"Daniel" , "Lucas" ,"Matthew" ,"Aiden" , "Jackson" ,"Logan" ,"David" ,"Joseph" ,
+                "Samuel" ,"Henry" ,"Owen" ,"Sebastian" , "Gabriel" ,"Carter" ,"Jayden" ,"John" , "Luke" ,"Anthony",
+                "Olivia", "Emma", "Ava", "Charlotte", "Sophia", "Amelia", "Isabella", "Lucas", "Mia", "Henry", "Evelyn", "Harper"};
+            var lastNames = new string[]{"Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez",
+                "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson",
+                "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
+                "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams",
+                "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts" };
+            
+            //var rand = new Random(0);
+            var rand = new Random();
 
+            var iAll = 0;
+            var iDel = 0;
+            var iIns = 0;
+            var iFind = 0;
+            var dataTest = new ArrayList(nOfInsertions);
+            var keysTest = new ArrayList(nOfInsertions);
+            var suborKlucov = new FIleHandler<KeyStr>("_testKeys", new KeyStr().Size());
+            var suborOsob = new FIleHandler<Osoba>("_testOsoba", new Osoba().Size());
+            var nazovStromu = "_testTree";
+            var treeFileTest = new BTree<KeyStr, Osoba>(suborKlucov,suborOsob,nazovStromu);
+            var treeRamTest = new T23Tree<KeyStr, Osoba>();
+
+            Console.Write("INSERT(" + nOfInsertions + ")");
+            for (int j = 1; j <= nOfInsertions; j++)
+            {
+                string cislotry;
+                do
+                {
+                    cislotry = rand.Next(1,Int32.MaxValue).ToString("0000000000");
+                } while (keysTest.Contains(cislotry));
+                KeyStr actKey = new KeyStr(cislotry);
+
+                var os = new Osoba(firstNames[rand.Next(firstNames.Length)], lastNames[rand.Next(lastNames.Length)], cislotry, rand.Next(1900,2020), rand.Next(1,12), rand.Next(1,27));
+                dataTest.Add(os.ToString());
+                keysTest.Add(cislotry);
+                //nodesTest.Add();
+                treeRamTest.Insert(actKey, os);
+                treeFileTest.Insert(actKey, os);
+
+                //Console.WriteLine(treeRamTest.VypisVsetko());
+                /*string vypis = "\n";
+                treeFileTest.GetNodesFile().ReadWholeFile(ref vypis);
+                Console.Write(vypis);*/
+
+                //Console.Write(treeFileTest.ToString());
+                //treeFileTest.GetData;
+
+                if (j % 100000 == 0) System.Console.Write("|");
+                else if (j % 10000 == 0) System.Console.Write(",");
+                else if (j % 1000 == 0) System.Console.Write(".");
+
+                iIns++;
+                iAll++;
+
+                /*//tests
+                System.Console.WriteLine("DONE");
+                Console.Write("Length Test.....");
+                Console.WriteLine(treeFileTest.Count() == dataTest.Count ? "PASS" : "FAIL");
+                Console.Write("Containment Test.....");
+                var foundMistak = false;
+                for (int i = 0; i < dataTest.Count; i++)
+                {
+                    if (!dataTest.Contains(treeFileTest.GetData((KeyStr)keysTest[i]).ToString()))
+                    {
+                        foundMistak = true;
+                        Console.WriteLine("\n" + i + "\n"
+                            + treeFileTest.GetData((KeyStr)keysTest[i]).ToString() + "\n"
+                            + dataTest[i].ToString());
+                        break;
+                    }
+                    if (i % 100000 == 0) System.Console.Write("|");
+                    else if (i % 10000 == 0) System.Console.Write(",");
+                    else if (i % 1000 == 0) System.Console.Write(".");
+                }
+                Console.WriteLine(foundMistak ? "FAIL" : "PASS");
+                Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);*/
+            }
+            //tests
+            System.Console.WriteLine("DONE");
+            Console.Write("Length Test.....");
+            Console.WriteLine(treeFileTest.Count() == dataTest.Count ? "PASS" : "FAIL");
+            Console.Write("Sequence Test(is same as RAM tree?).....");
+            var nodeF = treeFileTest.InOrder();
+            var nodeR = treeRamTest.InOrder();
+            var foundMistake = false;
+            for (int j = 0; j < dataTest.Count; j++)
+            {
+                
+                if (nodeF.ToString().CompareTo(nodeR.ToString()) != 0) { foundMistake = true; break; }
+            }
+            Console.WriteLine(foundMistake ? "FAIL" : "PASS");
+            Console.Write("Containment Test.....");
+            foundMistake = false;
+            var dum = new DummyClass();
+            for (int j = 0; j < dataTest.Count; j++)
+            {
+                if (!dataTest.Contains(treeFileTest.GetData(new KeyStr((string)keysTest[j])).ToString()))
+                {
+                    foundMistake = true;
+                    Console.WriteLine("\n" + j + "\n"
+                        + treeFileTest.GetData(new KeyStr((string)keysTest[j])).ToString() + "\n"
+                        + dataTest[j].ToString());
+                    break;
+                }
+            }
+            Console.WriteLine(foundMistake ? "FAIL" : "PASS");
+            Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
+        }
+        public void TestAllTreeFile(int nOfInsertions, double deletionsFraction, double findsFraction)
+        {
+            var firstNames = new string[]{
+                "Noah" ,"Liam" ,"William" ,"Mason" , "James" ,"Benjamin" ,"Jacob" , "Michael" ,"Elijah" ,"Ethan" ,
+                "Alexander" ,"Oliver" ,"Daniel" , "Lucas" ,"Matthew" ,"Aiden" , "Jackson" ,"Logan" ,"David" ,"Joseph" ,
+                "Samuel" ,"Henry" ,"Owen" ,"Sebastian" , "Gabriel" ,"Carter" ,"Jayden" ,"John" , "Luke" ,"Anthony",
+                "Olivia", "Emma", "Ava", "Charlotte", "Sophia", "Amelia", "Isabella", "Lucas", "Mia", "Henry", "Evelyn", "Harper"};
+            var lastNames = new string[]{"Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez",
+                "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson",
+                "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
+                "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams",
+                "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts" };
+
+            var rand = new Random(0);
+            //var rand = new Random();
+
+            var iAll = 0;
+            var iDel = 0;
+            var iIns = 0;
+            var iFind = 0;
+            var dataTest = new ArrayList(nOfInsertions);
+            var keysTest = new ArrayList(nOfInsertions);
+            var suborKlucov = new FIleHandler<KeyStr>("_testKeys", new KeyStr().Size());
+            var suborOsob = new FIleHandler<Osoba>("_testOsoba", new Osoba().Size());
+            var nazovStromu = "_testTree";
+            var treeFileTest = new BTree<KeyStr, Osoba>(suborKlucov, suborOsob, nazovStromu);
+            var treeRamTest = new T23Tree<KeyStr, Osoba>();
+
+            Console.Write("INSERT:DELETE:FIND(" + nOfInsertions + ":" + (int)(nOfInsertions * deletionsFraction) + ":" + (int)(nOfInsertions * findsFraction) + ")");
+            for (int j = 1; j <= nOfInsertions; j++)
+            {
+                var countNow = dataTest.Count;
+                var nd = rand.NextDouble();
+                if (nd < deletionsFraction && countNow != 0)
+                {
+                    var delWhat = rand.Next(countNow);
+                    KeyStr actKey = new KeyStr((string)keysTest[delWhat]);
+                    treeFileTest.Delete(actKey);
+                    treeRamTest.Delete(actKey);
+                    keysTest.RemoveAt(delWhat);
+                    dataTest.RemoveAt(delWhat);
+                    iDel++;
+                    iAll--;
+
+                    //tests 
+                    /*
+                    Console.Write("Del - " + delWhat);
+                    Console.Write("Length Test.....");
+                    Console.WriteLine(suborHandler.GetCount() == dataTest.Count ? "PASS" : "FAIL");
+                    Console.Write("Containment Test.....");
+                    var foundMistak = false;
+                    var dumm = new DummyClass();
+                    for (int i = 0; i < dataTest.Count; i++)
+                    {
+                        if (suborHandler.ReadFromFile((long)keysFile[i]) == null) continue;
+                        if (!dataTest.Contains(dumm.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString()))
+                        {
+                            foundMistak = true; Console.WriteLine("\n" + i + "\n" + dumm.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString() + "\n" + dataTest[i].ToString());
+                            break;
+                        }
+                    }
+                    Console.WriteLine(foundMistak ? "FAIL" : "PASS");
+                    Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
+                    */
+                }
+
+                countNow = dataTest.Count;
+                var nf = rand.NextDouble();
+                if (nf < findsFraction && countNow != 0)
+                {
+                    var findWhat = rand.Next(countNow);
+                    KeyStr actKey = new KeyStr((string)keysTest[findWhat]);
+                    treeFileTest.GetData(actKey);
+                    treeRamTest.GetData(actKey);
+                    iFind++;
+
+                    /*//tests 
+                    Console.Write("Find - " + findWhat);
+                    Console.Write("Length Test.....");
+                    Console.WriteLine(suborHandler.GetCount() == dataTest.Count ? "PASS" : "FAIL");
+                    Console.Write("Containment Test.....");
+                    var foundMistak = false;
+                    var dumm = new DummyClass();
+                    for (int i = 0; i < dataTest.Count; i++)
+                    {
+                        if (suborHandler.ReadFromFile((long)keysFile[i]) == null) continue;
+                        if (!dataTest.Contains(dumm.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString()))
+                        {
+                            foundMistak = true; Console.WriteLine("\n" + i + "\n" + dumm.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString() + "\n" + dataTest[i].ToString());
+                            break;
+                        }
+                    }
+                    Console.WriteLine(foundMistak ? "FAIL" : "PASS");
+                    Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
+                    */
+                }
+                string cislotry;
+                do
+                {
+                    cislotry = rand.Next(1, Int32.MaxValue).ToString("0000000000");
+                } while (keysTest.Contains(cislotry));
+                KeyStr acttKey = new KeyStr(cislotry);
+
+                var os = new Osoba(firstNames[rand.Next(firstNames.Length)], lastNames[rand.Next(lastNames.Length)], cislotry, rand.Next(1900, 2020), rand.Next(1, 12), rand.Next(1, 27));
+                dataTest.Add(os.ToString());
+                keysTest.Add(cislotry);
+                treeFileTest.Insert(acttKey, os);
+                treeRamTest.Insert(acttKey, os);
+
+                if (j % 1000000 == 0) System.Console.Write("|");
+                else if (j % 100000 == 0) System.Console.Write(",");
+                else if (j % 10000 == 0) System.Console.Write(".");
+
+                iIns++;
+                iAll++;
+            }
+            /*
+            var delWat = rand.Next(dataTest.Count);
+            treeFileTest.Delete((KeyStr)keysFile[delWat]);
+            keysFile.RemoveAt(delWat);
+            dataTest.RemoveAt(delWat);
+            iDel++;
+
+            var acKey = new KeyStr("9900000000");
+            var oso = new Osoba("Tomas", "Serdel", "9900000000", 1998, 12, 08);
+            dataTest.Add(oso.ToString());
+            keysFile.Add(acKey);
+            treeFileTest.Insert(acKey, oso);
+            iIns++;
+            */
+            //tests
+            //tests
+            System.Console.WriteLine("DONE");
+            Console.Write("Length Test.....");
+            Console.WriteLine(treeFileTest.Count() == dataTest.Count ? "PASS" : "FAIL");
+            Console.Write("Sequence Test(is same as RAM tree?).....");
+            var nodeF = treeFileTest.InOrder();
+            var nodeR = treeRamTest.InOrder();
+            var foundMistake = false;
+            for (int j = 0; j < dataTest.Count; j++)
+            {
+
+                if (nodeF.ToString().CompareTo(nodeR.ToString()) != 0) { foundMistake = true; break; }
+            }
+            Console.WriteLine(foundMistake ? "FAIL" : "PASS");
+            Console.Write("Containment Test.....");
+            foundMistake = false;
+            var dum = new DummyClass();
+            for (int j = 0; j < dataTest.Count; j++)
+            {
+                if (!dataTest.Contains(treeFileTest.GetData(new KeyStr((string)keysTest[j])).ToString()))
+                {
+                    foundMistake = true;
+                    Console.WriteLine("\n" + j + "\n"
+                        + treeFileTest.GetData(new KeyStr((string)keysTest[j])).ToString() + "\n"
+                        + dataTest[j].ToString());
+                    break;
+                }
+            }
+            Console.WriteLine(foundMistake ? "FAIL" : "PASS");
+            Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
+        }
     }
 }

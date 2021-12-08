@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 
 namespace Semka2
 {
-	class FIleHandler<T> where T : IDataToFIle<T>
+	public class FIleHandler<T> where T : IDataToFIle<T>
 	{
+		private T _tInstance;
 		private FileStream _fileData;
 		private int _lengthOfRecord;
-		private int _count;
+		private long _count;
 		private FileStream _fileTemp;
 		private LinkedList<long> _freeSpace;
 
 		public FIleHandler(string pFileName, int pLenOfRec)
 		{
+			_tInstance = default;
 			_lengthOfRecord = pLenOfRec;
 			_freeSpace = new LinkedList<long>();
 			_count = 0;
@@ -52,6 +54,17 @@ namespace Semka2
 			_fileTemp.Flush();
 			_fileTemp.Close();
 		}
+		public void SetInstance(T pTInstance) { _tInstance = pTInstance; }
+		public long InsertNextWhere() { return _freeSpace.Count() == 0 ? _count : _freeSpace.First(); }
+		public long FindWhere(T data) {
+			var nString = "";
+			long where = -1;
+			do {
+				where++;
+				nString = ReadFromFile(where).ToString();
+			} while (data.ToString().CompareTo(nString) != 0 && where < _count);
+			return where; 
+		}
 		public long InsertToFile(T pData)
 		{
 			//byte[] bA = Encoding.ASCII.GetBytes(sToWrite);
@@ -63,11 +76,18 @@ namespace Semka2
 			_fileData.Seek(where * _lengthOfRecord, SeekOrigin.Begin);
 			var nPos = _fileData.Position/_lengthOfRecord;
 			foreach (byte bt in pData.ToByteArray()) _fileData.WriteByte(bt);
-			//_fileData.Flush(); 
+			_fileData.Flush(); 
 			_count++;
 			return nPos;
 		}
-
+		public long UpdateInFIle(T pData, long pWhere)
+        {
+			_fileData.Seek(pWhere * _lengthOfRecord, SeekOrigin.Begin);
+			var nPos = _fileData.Position / _lengthOfRecord;
+			foreach (byte bt in pData.ToByteArray()) _fileData.WriteByte(bt);
+			_fileData.Flush(); 
+			return nPos;
+		}
 		public T ReadFromFile(long pWhere)
 		{
 			if (_freeSpace.Contains(pWhere) || _fileData.Seek(pWhere * _lengthOfRecord, SeekOrigin.Begin) > _fileData.Seek(-_lengthOfRecord, SeekOrigin.End)) return default;
@@ -80,8 +100,9 @@ namespace Semka2
 				byteArr[count] = (byte)b;
 				count++;
 			}
-			T instance = (T)Activator.CreateInstance<T>();
-			return instance.FromByteArray(byteArr);
+			if (_tInstance == null) 
+				_tInstance = (T)Activator.CreateInstance<T>(); // cool but evil
+			return _tInstance.FromByteArray(byteArr);
 		}
 		public bool DeleteFromFile(long pWhere)
 		{
@@ -112,7 +133,17 @@ namespace Semka2
 			_count--;
 			return true;
 		}
-		public int GetCount()
+		public bool ReadWholeFile(ref string vypis)
+		{
+			var count = 0;
+			do {
+				if (ReadFromFile(count) != null)
+					vypis = vypis + ReadFromFile(count).ToString();
+				count++;
+			} while (count <= _count);
+			return true;
+		}
+		public long GetCount()
         {
 			return _count;
         }

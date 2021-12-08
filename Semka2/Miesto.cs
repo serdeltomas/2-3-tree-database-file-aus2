@@ -9,8 +9,8 @@ namespace Semka2
     class Miesto : ICsv, IDataToFIle<Miesto>
     {
         private int _cislo;
-        private T23Tree<KeyDat, PcrTest> _stromPcr = new T23Tree<KeyDat, PcrTest>();
-        private T23Tree<KeyRodCis, PcrTest> _stromPcrRodCislo = new T23Tree<KeyRodCis, PcrTest>();
+        private BTree<KeyDat, PcrTest> _stromPcr = new BTree<KeyDat, PcrTest>();
+        private BTree<KeyRodCis, PcrTest> _stromPcrRodCislo = new BTree<KeyRodCis, PcrTest>();
         private const int FULL_MAX_LEN = 0;
 
         public Miesto() { }
@@ -23,11 +23,11 @@ namespace Semka2
             throw new NotImplementedException();
         }
 
-        public T23Tree<KeyDat, PcrTest> GetTree()
+        public BTree<KeyDat, PcrTest> GetTree()
         {
             return _stromPcr;
         }
-        public T23Tree<KeyRodCis, PcrTest> GetTreeRodCis()
+        public BTree<KeyRodCis, PcrTest> GetTreeRodCis()
         {
             return _stromPcrRodCislo;
         }

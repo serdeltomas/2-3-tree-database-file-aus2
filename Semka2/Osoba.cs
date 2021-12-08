@@ -15,8 +15,9 @@ namespace Semka2
         private const int DAT_MAX_LEN = 25;
         private const int FULL_MAX_LEN = 3 * sizeof(Int32) + (MENO_MAX_LEN + PRIE_MAX_LEN + RC_MAX_LEN + DAT_MAX_LEN + 1) * sizeof(char);
 
-        private T23Tree<KeyDat, PcrTest> _stromPcr = new T23Tree<KeyDat, PcrTest>(); //not taking tree into account atm
+        private BTree<KeyDat, PcrTest> _stromPcr = new BTree<KeyDat, PcrTest>(); //not taking tree into account atm
 
+        public Osoba() { }
         public Osoba(string pMeno, string pPriezvisko, string pRodCislo, int pRokNar, int pMesNar, int pDenNar)
         {
             _meno = pMeno;
@@ -33,7 +34,8 @@ namespace Semka2
         }
         public override string ToString()
         {
-            return "  rod. cislo: " + _rodCislo + "   dat. narodenia: " + _datNar + "\t meno: " + _meno + "\t priezvisko: " + _priezvisko + "\n";
+            //return "  rod. cislo: " + _rodCislo + "   dat. narodenia: " + _datNar + "\t meno: " + _meno + "\t priezvisko: " + _priezvisko + "\n";
+            return _rodCislo;
         }
         public string GetMeno() {return _meno; }
         public string GetPriezv() { return _priezvisko; }
@@ -41,7 +43,7 @@ namespace Semka2
         {   
             return _rodCislo;
         }
-        public T23Tree<KeyDat, PcrTest> GetTree()
+        public BTree<KeyDat, PcrTest> GetTree()
         {
             return _stromPcr;
         }
@@ -84,16 +86,15 @@ namespace Semka2
             var a2 = "";
             for (int i = 0; i < PRIE_MAX_LEN; i++)
                 if (i >= PRIE_MAX_LEN - BitConverter.ToInt32(pArray, sizeof(Int32) + sizeof(char) * MENO_MAX_LEN))
-                    a2 = a2 + BitConverter.ToChar(pArray, sizeof(Int32) + sizeof(char) * MENO_MAX_LEN + i * sizeof(char));
+                    a2 = a2 + BitConverter.ToChar(pArray, 2*sizeof(Int32) + sizeof(char) * MENO_MAX_LEN + i * sizeof(char));
             //rod cis
             var a3 = "";
             for (int i = 0; i < RC_MAX_LEN; i++)
-                if (i >= RC_MAX_LEN - BitConverter.ToInt32(pArray, 2 * sizeof(Int32) + sizeof(char) * (MENO_MAX_LEN + PRIE_MAX_LEN)))
-                    a3 = a3 + BitConverter.ToChar(pArray, 2 * sizeof(Int32) + sizeof(char) * (MENO_MAX_LEN + PRIE_MAX_LEN + i));
+                a3 = a3 + BitConverter.ToChar(pArray, 2 * sizeof(Int32) + sizeof(char) * (MENO_MAX_LEN + PRIE_MAX_LEN + i));
             //dat nar
             var a4 = "";
             for (int i = 0; i < DAT_MAX_LEN; i++)
-                if (i >= DAT_MAX_LEN - BitConverter.ToInt32(pArray, 3 * sizeof(Int32) + sizeof(char) * (MENO_MAX_LEN + PRIE_MAX_LEN+ RC_MAX_LEN)))
+                if (i >= DAT_MAX_LEN - BitConverter.ToInt32(pArray, 2 * sizeof(Int32) + sizeof(char) * (MENO_MAX_LEN + PRIE_MAX_LEN+ RC_MAX_LEN)))
                     a4 = a4 + BitConverter.ToChar(pArray, 3 * sizeof(Int32) + sizeof(char) * (MENO_MAX_LEN + PRIE_MAX_LEN + RC_MAX_LEN + i));
             //strom somewhero hero
 

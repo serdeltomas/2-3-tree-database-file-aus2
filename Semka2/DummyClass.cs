@@ -24,7 +24,7 @@ namespace Semka2
         public DummyClass()
         {
             _a1 = "";
-            _a2 = 0;
+            _a2 = 0.0;
             _a3 = 0;
         }   
 

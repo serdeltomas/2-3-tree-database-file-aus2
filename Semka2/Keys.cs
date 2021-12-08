@@ -6,12 +6,13 @@ namespace Semka2
     {
         private string _keyVal;
         private const int KEY_MAX_LEN = 20;
-        private const int FULL_MAX_LEN = KEY_MAX_LEN * sizeof(char);
+        private const int FULL_MAX_LEN = sizeof(int) + (KEY_MAX_LEN + 1) * sizeof(char);
 
         public KeyStr(string key)
         {
             _keyVal = key;
         }
+        public KeyStr() { }
 
         public string GetKey()
         {
@@ -32,12 +33,23 @@ namespace Semka2
 
         public byte[] ToByteArray()
         {
-            throw new NotImplementedException();
+            var rt = new byte[0];
+            //meno
+            rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(_keyVal.Length));
+            var a1 = _keyVal.PadLeft(KEY_MAX_LEN);
+            foreach (var ch in a1) { rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(ch)); }
+            //newline
+            rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes('\n'));
+            return rt;
         }
 
         public KeyStr FromByteArray(byte[] pArray)
         {
-            throw new NotImplementedException();
+            var a1 = "";
+            for (int i = 0; i < KEY_MAX_LEN; i++)
+                if (i >= KEY_MAX_LEN - BitConverter.ToInt32(pArray, 0))
+                    a1 = a1 + BitConverter.ToChar(pArray, sizeof(Int32) + i * sizeof(char));
+            return new KeyStr(a1);
         }
 
         public int Size()
