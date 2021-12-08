@@ -543,7 +543,7 @@ namespace Semka2
             var suborOsob = new FIleHandler<Osoba>("_testOsoba", new Osoba().Size());
             var nazovStromu = "_testTree";
             var treeFileTest = new BTree<KeyStr, Osoba>(suborKlucov,suborOsob,nazovStromu);
-            var treeRamTest = new T23Tree<KeyStr, Osoba>();
+            var treeRamTest = new TwoThreeTree<KeyStr, Osoba>();
 
             Console.Write("INSERT(" + nOfInsertions + ")");
             for (int j = 1; j <= nOfInsertions; j++)
@@ -657,7 +657,7 @@ namespace Semka2
             var suborOsob = new FIleHandler<Osoba>("_testOsoba", new Osoba().Size());
             var nazovStromu = "_testTree";
             var treeFileTest = new BTree<KeyStr, Osoba>(suborKlucov, suborOsob, nazovStromu);
-            var treeRamTest = new T23Tree<KeyStr, Osoba>();
+            var treeRamTest = new TwoThreeTree<KeyStr, Osoba>();
 
             Console.Write("INSERT:DELETE:FIND(" + nOfInsertions + ":" + (int)(nOfInsertions * deletionsFraction) + ":" + (int)(nOfInsertions * findsFraction) + ")");
             for (int j = 1; j <= nOfInsertions; j++)
@@ -761,7 +761,7 @@ namespace Semka2
             treeFileTest.Insert(acKey, oso);
             iIns++;
             */
-            //tests
+
             //tests
             System.Console.WriteLine("DONE");
             Console.Write("Length Test.....");
@@ -774,21 +774,6 @@ namespace Semka2
             {
 
                 if (nodeF.ToString().CompareTo(nodeR.ToString()) != 0) { foundMistake = true; break; }
-            }
-            Console.WriteLine(foundMistake ? "FAIL" : "PASS");
-            Console.Write("Containment Test.....");
-            foundMistake = false;
-            var dum = new DummyClass();
-            for (int j = 0; j < dataTest.Count; j++)
-            {
-                if (!dataTest.Contains(treeFileTest.GetData(new KeyStr((string)keysTest[j])).ToString()))
-                {
-                    foundMistake = true;
-                    Console.WriteLine("\n" + j + "\n"
-                        + treeFileTest.GetData(new KeyStr((string)keysTest[j])).ToString() + "\n"
-                        + dataTest[j].ToString());
-                    break;
-                }
             }
             Console.WriteLine(foundMistake ? "FAIL" : "PASS");
             Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
