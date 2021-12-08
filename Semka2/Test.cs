@@ -614,21 +614,6 @@ namespace Semka2
                 if (nodeF.ToString().CompareTo(nodeR.ToString()) != 0) { foundMistake = true; break; }
             }
             Console.WriteLine(foundMistake ? "FAIL" : "PASS");
-            Console.Write("Containment Test.....");
-            foundMistake = false;
-            var dum = new DummyClass();
-            for (int j = 0; j < dataTest.Count; j++)
-            {
-                if (!dataTest.Contains(treeFileTest.GetData(new KeyStr((string)keysTest[j])).ToString()))
-                {
-                    foundMistake = true;
-                    Console.WriteLine("\n" + j + "\n"
-                        + treeFileTest.GetData(new KeyStr((string)keysTest[j])).ToString() + "\n"
-                        + dataTest[j].ToString());
-                    break;
-                }
-            }
-            Console.WriteLine(foundMistake ? "FAIL" : "PASS");
             Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
         }
         public void TestAllTreeFile(int nOfInsertions, double deletionsFraction, double findsFraction)
