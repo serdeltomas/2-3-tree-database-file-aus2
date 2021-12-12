@@ -46,6 +46,11 @@ namespace Semka2
         {
             return _cislo.ToString();
         }
+
+        public string StringFromFIle()
+        {
+            throw new NotImplementedException();
+        }
     }
     
 }

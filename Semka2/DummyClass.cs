@@ -67,5 +67,9 @@ namespace Semka2
             return _a1.Length + " " + _a1 + " " + _a2 + " " + _a3;
         }
 
+        public string StringFromFIle()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace Semka2
         public byte[] ToByteArray();
         public T FromByteArray(byte[] pArray);
         public int Size();
+        public string StringFromFIle();
     }
 }

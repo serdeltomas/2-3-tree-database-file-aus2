@@ -35,8 +35,8 @@ namespace Semka2
         {
             var rt = new byte[0];
             //meno
-            rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(_keyVal.Length));
-            var a1 = _keyVal.PadLeft(KEY_MAX_LEN);
+            rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(_keyVal == null ? -1 : _keyVal.Length));
+            var a1 = _keyVal == null ? "-11111111-".PadLeft(KEY_MAX_LEN) : _keyVal.PadLeft(KEY_MAX_LEN);
             foreach (var ch in a1) { rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes(ch)); }
             //newline
             rt = BytesAdder.AddBytes(rt, BitConverter.GetBytes('\n'));
@@ -45,6 +45,7 @@ namespace Semka2
 
         public KeyStr FromByteArray(byte[] pArray)
         {
+            if (BitConverter.ToInt32(pArray, 0) == -1) return null;
             var a1 = "";
             for (int i = 0; i < KEY_MAX_LEN; i++)
                 if (i >= KEY_MAX_LEN - BitConverter.ToInt32(pArray, 0))
@@ -55,6 +56,11 @@ namespace Semka2
         public int Size()
         {
             return FULL_MAX_LEN;
+        }
+
+        public string StringFromFIle()
+        {
+            throw new NotImplementedException();
         }
     }
     class KeyInt : IComparable<KeyInt>, IDataToFIle<KeyInt>
@@ -97,6 +103,11 @@ namespace Semka2
         public int Size()
         {
             return FULL_MAX_LEN;
+        }
+
+        public string StringFromFIle()
+        {
+            throw new NotImplementedException();
         }
     }
     class KeyDat : IComparable<KeyDat>, IDataToFIle<KeyDat>
@@ -145,6 +156,11 @@ namespace Semka2
         {
             return FULL_MAX_LEN;
         }
+
+        public string StringFromFIle()
+        {
+            throw new NotImplementedException();
+        }
     }
     class KeyRodCis : IComparable<KeyRodCis>, IDataToFIle<KeyRodCis>
     {
@@ -191,6 +207,11 @@ namespace Semka2
         public int Size()
         {
             return FULL_MAX_LEN;
+        }
+
+        public string StringFromFIle()
+        {
+            throw new NotImplementedException();
         }
     }
 }

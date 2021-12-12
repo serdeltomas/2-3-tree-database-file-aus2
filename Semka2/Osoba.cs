@@ -105,5 +105,10 @@ namespace Semka2
         {
             return FULL_MAX_LEN;
         }
+
+        public string StringFromFIle()
+        {
+            return _rodCislo;
+        }
     }
 }

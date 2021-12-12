@@ -101,7 +101,7 @@ namespace Semka2
 				count++;
 			}
 			if (_tInstance == null) 
-				_tInstance = (T)Activator.CreateInstance<T>(); // cool but evil
+				_tInstance = Activator.CreateInstance<T>(); // cool but evil
 			return _tInstance.FromByteArray(byteArr);
 		}
 		public bool DeleteFromFile(long pWhere)
@@ -138,9 +138,9 @@ namespace Semka2
 			var count = 0;
 			do {
 				if (ReadFromFile(count) != null)
-					vypis = vypis + ReadFromFile(count).ToString();
-				count++;
-			} while (count <= _count);
+					vypis = vypis + ReadFromFile(count).StringFromFIle();
+					count++;
+			} while (count < _count + _freeSpace.Count());
 			return true;
 		}
 		public long GetCount()

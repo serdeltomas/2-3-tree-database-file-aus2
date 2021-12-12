@@ -542,7 +542,7 @@ namespace Semka2
             var suborKlucov = new FIleHandler<KeyStr>("_testKeys", new KeyStr().Size());
             var suborOsob = new FIleHandler<Osoba>("_testOsoba", new Osoba().Size());
             var nazovStromu = "_testTree";
-            var treeFileTest = new BTree<KeyStr, Osoba>(suborKlucov,suborOsob,nazovStromu);
+            var treeFileTest = new BTree<KeyStr, Osoba>(suborOsob,nazovStromu);
             var treeRamTest = new TwoThreeTree<KeyStr, Osoba>();
 
             Console.Write("INSERT(" + nOfInsertions + ")");
@@ -570,9 +570,9 @@ namespace Semka2
                 //Console.Write(treeFileTest.ToString());
                 //treeFileTest.GetData;
 
-                if (j % 100000 == 0) System.Console.Write("|");
-                else if (j % 10000 == 0) System.Console.Write(",");
-                else if (j % 1000 == 0) System.Console.Write(".");
+                if (j % (nOfInsertions / 2) == 0) System.Console.Write("|");
+                else if (j % (nOfInsertions / 10) == 0) System.Console.Write(",");
+                else if (j % (nOfInsertions / 20) == 0) System.Console.Write(".");
 
                 iIns++;
                 iAll++;
@@ -615,6 +615,13 @@ namespace Semka2
             }
             Console.WriteLine(foundMistake ? "FAIL" : "PASS");
             Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
+
+            var acKey = new KeyStr("9900000000");
+            var oso = new Osoba("Tomas", "Serdel", "9900000000", 1998, 12, 08);
+            dataTest.Add(oso.ToString());
+            keysTest.Add(acKey);
+            treeFileTest.Insert(acKey, oso);
+            iIns++;
         }
         public void TestAllTreeFile(int nOfInsertions, double deletionsFraction, double findsFraction)
         {
@@ -629,7 +636,7 @@ namespace Semka2
                 "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams",
                 "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts" };
 
-            var rand = new Random(0);
+            var rand = new Random(2);
             //var rand = new Random();
 
             var iAll = 0;
@@ -641,7 +648,7 @@ namespace Semka2
             var suborKlucov = new FIleHandler<KeyStr>("_testKeys", new KeyStr().Size());
             var suborOsob = new FIleHandler<Osoba>("_testOsoba", new Osoba().Size());
             var nazovStromu = "_testTree";
-            var treeFileTest = new BTree<KeyStr, Osoba>(suborKlucov, suborOsob, nazovStromu);
+            var treeFileTest = new BTree<KeyStr, Osoba>(suborOsob, nazovStromu);
             var treeRamTest = new TwoThreeTree<KeyStr, Osoba>();
 
             Console.Write("INSERT:DELETE:FIND(" + nOfInsertions + ":" + (int)(nOfInsertions * deletionsFraction) + ":" + (int)(nOfInsertions * findsFraction) + ")");
@@ -659,6 +666,12 @@ namespace Semka2
                     dataTest.RemoveAt(delWhat);
                     iDel++;
                     iAll--;
+
+                    Console.WriteLine("\nDelete " + actKey.ToString());
+                    string vypis = "";
+                    treeFileTest.GetNodesFile().ReadWholeFile(ref vypis);
+                    Console.Write(vypis);
+                    Console.WriteLine(treeFileTest.ToString());
 
                     //tests 
                     /*
@@ -731,6 +744,12 @@ namespace Semka2
 
                 iIns++;
                 iAll++;
+
+                Console.WriteLine("\nInsert " + acttKey.ToString());
+                string vypiss = "";
+                treeFileTest.GetNodesFile().ReadWholeFile(ref vypiss);
+                Console.Write(vypiss);
+                Console.WriteLine(treeFileTest.ToString());
             }
             /*
             var delWat = rand.Next(dataTest.Count);
