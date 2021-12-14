@@ -15,8 +15,8 @@ namespace Semka2
             //test.TestAll(200000,0.2,0.2);
             //test.TestInsertFile(1000000);
             //test.TestAllFile(100000, 0.2, 0.2);
-            //test.TestInsertTreeFile(10000);
-            test.TestAllTreeFile(100, 0.2, 0.2);
+            test.TestInsertTreeFile(100);
+            //test.TestAllTreeFile(100, 0.2, 0.2);
 
             /*var dumdum = new DummyClass("jan",0.9899, 0);
             var fh = new FIleHandler<DummyClass>("dumdum",dumdum.Size());

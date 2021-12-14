@@ -129,7 +129,14 @@ namespace Semka2
             _nodesFile.DeleteFromFile(delWhat);
         }
         private void Insert3Node(BNode<TKey, T> node, BNode<TKey, T> nodeIns){
-            if (node.GetLeftKey().CompareTo(nodeIns.GetLeftKey()) > 0) { // nkey < lkey
+            var isNodeInsDel = false;
+            if (node.GetLeftKey().CompareTo(nodeIns.GetLeftKey()) > 0)
+            { // nkey < lkey
+                //test vypis
+                var vyp = "\n";
+                _nodesFile.ReadWholeFile(ref vyp);
+                Console.WriteLine(vyp);
+                //test vypis end
                 var nPos = _nodesFile.InsertToFile(new BNode<TKey, T>(node.GetRightKey(), node.GetRightDataPos(), node.GetPos(), _dataFile, _nodesFile, _nodesFile.InsertNextWhere()));
                 node.SetLeftChild(nPos);
                 if(node.GetMiddleChildPos() != -1) node.GetLeftChild().SetLeftChild(node.GetMiddleChildPos(),node.GetLeftChildPos());
@@ -139,7 +146,13 @@ namespace Semka2
                 node.ClearRight();
                 node.SetMiddleChild(-1);
             }
-            else if (node.GetRightKey().CompareTo(nodeIns.GetLeftKey()) < 0) { // rkey < nkey
+            else if (node.GetRightKey().CompareTo(nodeIns.GetLeftKey()) < 0)
+            { // rkey < nkey
+                //test vypis
+                var vyp = "\n";
+                _nodesFile.ReadWholeFile(ref vyp);
+                Console.WriteLine(vyp);
+                //test vypis end
                 var nPos = _nodesFile.InsertToFile(new BNode<TKey, T>(node.GetLeftKey(), node.GetLeftDataPos(), node.GetPos(),  _dataFile, _nodesFile, _nodesFile.InsertNextWhere()));
                 node.SetRightChild(nPos);
                 if(node.GetLeftChildPos() != -1) node.GetRightChild().SetLeftChild(node.GetLeftChildPos(),node.GetRightChildPos());
@@ -150,7 +163,13 @@ namespace Semka2
                 node.ClearRight();
                 node.SetMiddleChild(-1);
             }
-            else { //lkey < nkey < rkey
+            else
+            { //lkey < nkey < rkey
+                //test vypis
+                var vyp = "\n";
+                _nodesFile.ReadWholeFile(ref vyp);
+                Console.WriteLine(vyp);
+                //test vypis end
                 var nPos1 = _nodesFile.InsertToFile(new BNode<TKey, T>(node.GetLeftKey(), node.GetLeftDataPos(), node.GetPos(),  _dataFile, _nodesFile, _nodesFile.InsertNextWhere()));
                 node.SetMiddleChild(nPos1);
                 if(node.GetLeftChildPos() != -1) node.GetMiddleChild().SetLeftChild(node.GetLeftChildPos(), node.GetMiddleChildPos());
@@ -165,8 +184,20 @@ namespace Semka2
                 node.ClearRight();
                 node.SetMiddleChild(-1);
             }
+            //test vypis
+            var vypi = "\n";
+            _nodesFile.ReadWholeFile(ref vypi);
+            Console.WriteLine(vypi);
+            //test vypis end
             _nodesFile.UpdateInFIle(node, node.GetPos());
-            _nodesFile.DeleteFromFile(nodeIns.GetPos());
+            //only sometimes delete
+            //if(isNodeInsDel)
+                //_nodesFile.DeleteFromFile(nodeIns.GetPos());
+            //test vypis
+             vypi = "\n";
+            _nodesFile.ReadWholeFile(ref vypi);
+            Console.WriteLine(vypi);
+            //test vypis end
         }
         //insert block end -----------------------------------------------------------------------------------------------------------
         //DELETE block----------------------------------------------------------------------------------------------------------
@@ -190,7 +221,7 @@ namespace Semka2
             var node = FindNodeToDelete(key);
             if (!node.IsLeaf()) { node = DeleteSwitch(node, key); }//node switch with inordernext;
             if(DeleteLeaf(node,key)) { 
-                _count--; _root = _nodesFile.ReadFromFile(_root.GetPos());
+                _count--; if(_count != 0) _root = _nodesFile.ReadFromFile(_root.GetPos());
                 if (_count != 0 && _root.GetParentPos() != -1) SetRoot(_root.GetParent()); return true;}
             node = _nodesFile.ReadFromFile(node.GetPos()); //idk
             while (node.GetPos() != -1 && node.GetParentPos() != -1 && node.GetParent().GetParentPos() != -1)
@@ -199,11 +230,6 @@ namespace Semka2
                 if (DeleteInternal(node.GetParent())) { 
                     _count--; _root = _nodesFile.ReadFromFile(_root.GetPos());
                     if (_count != 0 && _root.GetParentPos() != -1) SetRoot(_root.GetParent()); return true; }
-                //test vypis
-                var vyp = "\n";
-                _nodesFile.ReadWholeFile(ref vyp);
-                Console.WriteLine(vyp);
-                //test vypis end
                 node = _nodesFile.ReadFromFile(node.GetPos());
                 if (node != null) node = node.GetParent();
                 else node = parent;
@@ -390,6 +416,8 @@ namespace Semka2
                 var switchNode = this.InOrderNextNode(node, key);
                 node.SetLeft(switchNode.GetLeftKey(),switchNode.GetLeftDataPos());
                 switchNode.SetLeft(key,tempData);
+                _nodesFile.UpdateInFIle(node, node.GetPos());
+                _nodesFile.UpdateInFIle(switchNode, switchNode.GetPos());
                 return switchNode;
             }
             else { //key is rightval
@@ -397,6 +425,8 @@ namespace Semka2
                 var switchNode = this.InOrderNextNode(node, key);
                 node.SetRight(switchNode.GetLeftKey(),switchNode.GetLeftDataPos());
                 switchNode.SetLeft(key, tempData);
+                _nodesFile.UpdateInFIle(node,node.GetPos());
+                _nodesFile.UpdateInFIle(switchNode, switchNode.GetPos());
                 return switchNode;
             }
         }

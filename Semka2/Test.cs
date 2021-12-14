@@ -530,8 +530,8 @@ namespace Semka2
                 "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams",
                 "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts" };
             
-            //var rand = new Random(0);
-            var rand = new Random();
+            var rand = new Random(1);
+            //var rand = new Random();
 
             var iAll = 0;
             var iDel = 0;
@@ -577,28 +577,21 @@ namespace Semka2
                 iIns++;
                 iAll++;
 
-                /*//tests
-                System.Console.WriteLine("DONE");
+                //tests
+                System.Console.WriteLine("\nInserting - "+ actKey.ToString());
                 Console.Write("Length Test.....");
                 Console.WriteLine(treeFileTest.Count() == dataTest.Count ? "PASS" : "FAIL");
-                Console.Write("Containment Test.....");
+                Console.Write("Sequence Test(is same as RAM tree?).....");
+                var nodF = treeFileTest.InOrder();
+                var nodR = treeRamTest.InOrder();
                 var foundMistak = false;
-                for (int i = 0; i < dataTest.Count; i++)
+                for (int k = 0; k < dataTest.Count; k++)
                 {
-                    if (!dataTest.Contains(treeFileTest.GetData((KeyStr)keysTest[i]).ToString()))
-                    {
-                        foundMistak = true;
-                        Console.WriteLine("\n" + i + "\n"
-                            + treeFileTest.GetData((KeyStr)keysTest[i]).ToString() + "\n"
-                            + dataTest[i].ToString());
-                        break;
-                    }
-                    if (i % 100000 == 0) System.Console.Write("|");
-                    else if (i % 10000 == 0) System.Console.Write(",");
-                    else if (i % 1000 == 0) System.Console.Write(".");
+
+                    if (nodF.ToString().CompareTo(nodR.ToString()) != 0) { foundMistak = true; break; }
                 }
                 Console.WriteLine(foundMistak ? "FAIL" : "PASS");
-                Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);*/
+                Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
             }
             //tests
             System.Console.WriteLine("DONE");
@@ -636,7 +629,7 @@ namespace Semka2
                 "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams",
                 "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts" };
 
-            var rand = new Random(2);
+            var rand = new Random(1);
             //var rand = new Random();
 
             var iAll = 0;
@@ -667,32 +660,28 @@ namespace Semka2
                     iDel++;
                     iAll--;
 
-                    Console.WriteLine("\nDelete " + actKey.ToString());
+                    //vypis suboru
+                    /*Console.WriteLine("\nDelete " + actKey.ToString());
                     string vypis = "";
                     treeFileTest.GetNodesFile().ReadWholeFile(ref vypis);
                     Console.Write(vypis);
-                    Console.WriteLine(treeFileTest.ToString());
+                    Console.WriteLine(treeFileTest.ToString());*/
 
-                    //tests 
-                    /*
-                    Console.Write("Del - " + delWhat);
+                    //tests
+                    System.Console.WriteLine("\nDeleting - " + actKey.ToString());
                     Console.Write("Length Test.....");
-                    Console.WriteLine(suborHandler.GetCount() == dataTest.Count ? "PASS" : "FAIL");
-                    Console.Write("Containment Test.....");
+                    Console.WriteLine(treeFileTest.Count() == dataTest.Count ? "PASS" : "FAIL");
+                    Console.Write("Sequence Test(is same as RAM tree?).....");
+                    var nodF = treeFileTest.InOrder();
+                    var nodR = treeRamTest.InOrder();
                     var foundMistak = false;
-                    var dumm = new DummyClass();
                     for (int i = 0; i < dataTest.Count; i++)
                     {
-                        if (suborHandler.ReadFromFile((long)keysFile[i]) == null) continue;
-                        if (!dataTest.Contains(dumm.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString()))
-                        {
-                            foundMistak = true; Console.WriteLine("\n" + i + "\n" + dumm.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString() + "\n" + dataTest[i].ToString());
-                            break;
-                        }
+
+                        if (nodF.ToString().CompareTo(nodR.ToString()) != 0) { foundMistak = true; break; }
                     }
                     Console.WriteLine(foundMistak ? "FAIL" : "PASS");
                     Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
-                    */
                 }
 
                 countNow = dataTest.Count;
@@ -705,25 +694,21 @@ namespace Semka2
                     treeRamTest.GetData(actKey);
                     iFind++;
 
-                    /*//tests 
-                    Console.Write("Find - " + findWhat);
+                    //tests
+                    System.Console.WriteLine("\nFinding - " + actKey.ToString());
                     Console.Write("Length Test.....");
-                    Console.WriteLine(suborHandler.GetCount() == dataTest.Count ? "PASS" : "FAIL");
-                    Console.Write("Containment Test.....");
+                    Console.WriteLine(treeFileTest.Count() == dataTest.Count ? "PASS" : "FAIL");
+                    Console.Write("Sequence Test(is same as RAM tree?).....");
+                    var nodF = treeFileTest.InOrder();
+                    var nodR = treeRamTest.InOrder();
                     var foundMistak = false;
-                    var dumm = new DummyClass();
                     for (int i = 0; i < dataTest.Count; i++)
                     {
-                        if (suborHandler.ReadFromFile((long)keysFile[i]) == null) continue;
-                        if (!dataTest.Contains(dumm.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString()))
-                        {
-                            foundMistak = true; Console.WriteLine("\n" + i + "\n" + dumm.FromByteArray(suborHandler.ReadFromFile((long)keysFile[i])).ToString() + "\n" + dataTest[i].ToString());
-                            break;
-                        }
+
+                        if (nodF.ToString().CompareTo(nodR.ToString()) != 0) { foundMistak = true; break; }
                     }
                     Console.WriteLine(foundMistak ? "FAIL" : "PASS");
                     Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
-                    */
                 }
                 string cislotry;
                 do
@@ -745,11 +730,29 @@ namespace Semka2
                 iIns++;
                 iAll++;
 
-                Console.WriteLine("\nInsert " + acttKey.ToString());
+
+                //vypis suboru
+                /*Console.WriteLine("\nInsert " + acttKey.ToString());
                 string vypiss = "";
                 treeFileTest.GetNodesFile().ReadWholeFile(ref vypiss);
                 Console.Write(vypiss);
-                Console.WriteLine(treeFileTest.ToString());
+                Console.WriteLine(treeFileTest.ToString());*/
+
+                //tests
+                System.Console.WriteLine("\nInserting - " + acttKey.ToString());
+                Console.Write("Length Test.....");
+                Console.WriteLine(treeFileTest.Count() == dataTest.Count ? "PASS" : "FAIL");
+                Console.Write("Sequence Test(is same as RAM tree?).....");
+                var noF = treeFileTest.InOrder();
+                var noR = treeRamTest.InOrder();
+                var foundMistakee = false;
+                for (int k = 0; k < dataTest.Count; k++)
+                {
+
+                    if (noF.ToString().CompareTo(noR.ToString()) != 0) { foundMistakee = true; break; }
+                }
+                Console.WriteLine(foundMistakee ? "FAIL" : "PASS");
+                Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
             }
             /*
             var delWat = rand.Next(dataTest.Count);
@@ -767,7 +770,7 @@ namespace Semka2
             */
 
             //tests
-            System.Console.WriteLine("DONE");
+            /*System.Console.WriteLine("DONE");
             Console.Write("Length Test.....");
             Console.WriteLine(treeFileTest.Count() == dataTest.Count ? "PASS" : "FAIL");
             Console.Write("Sequence Test(is same as RAM tree?).....");
@@ -780,7 +783,7 @@ namespace Semka2
                 if (nodeF.ToString().CompareTo(nodeR.ToString()) != 0) { foundMistake = true; break; }
             }
             Console.WriteLine(foundMistake ? "FAIL" : "PASS");
-            Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);
+            Console.WriteLine("all:" + iAll + " ins:" + iIns + " del:" + iDel + " find:" + iFind);*/
         }
     }
 }
